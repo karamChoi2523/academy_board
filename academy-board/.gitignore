@@ -1,0 +1,26 @@
+# ===== 환경 변수 =====
+.env
+
+# ===== 시스템/운영체제 =====
+.DS_Store
+Thumbs.db
+
+# ===== IDE =====
+.vscode/
+.idea/
+
+# ===== 로그 & 캐시 =====
+*.log
+*.cache
+tmp/
+cache/
+
+# ===== 업로드 파일 =====
+uploads/
+uploads_tmp/
+
+# ===== 백업 및 빌드 산출물 =====
+*.bak
+*.zip
+*.tar
+*.tar.gz

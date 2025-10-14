@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>아카데미 게시판</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; }
+    body {
+      background: linear-gradient(to bottom right, #f9f9ff, #f0f9ff);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background: #4c9aff;
+      color: white;
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: 500;
+    }
+    nav a:hover { text-decoration: underline; }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 4rem 1rem;
+    }
+    main h2 {
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+    main p {
+      color: #555;
+      margin-bottom: 2.5rem;
+      font-size: 1.1rem;
+    }
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .btn {
+      padding: 0.8rem 1.8rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+      transition: 0.25s;
+    }
+    .btn-login {
+      background: #4c9aff;
+      color: white;
+    }
+    .btn-register {
+      background: white;
+      color: #4c9aff;
+      border: 2px solid #4c9aff;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    footer {
+      background: #f2f7ff;
+      text-align: center;
+      padding: 1rem 0;
+      color: #777;
+      font-size: 0.9rem;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    /* 반응형 */
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.3rem; }
+      nav a { margin-left: 0.8rem; font-size: 0.9rem; }
+      main h2 { font-size: 1.5rem; }
+      .btn { padding: 0.7rem 1.2rem; font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+  <script src="./js/common.js" defer></script>
+  <main>
+    <h2>환영합니다 🌟</h2>
+    <p>학생과 선생님이 함께 성장하는 공간,<br>하늘 아카데미 게시판입니다.</p>
+
+    <div class="btn-group">
+      <button class="btn btn-login" onclick="goTo('login.html')">로그인</button>
+      <button class="btn btn-register" onclick="goTo('register.html')">회원가입</button>
+    </div>
+  </main>
+
+  <footer>
+    © 2025 Haneul Academy Board · All Rights Reserved.
+  </footer>
+
+  <script>
+    function goTo(page) {
+      window.location.href = page;
+    }
+  </script>
+</body>
+</html>

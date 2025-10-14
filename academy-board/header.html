@@ -1,0 +1,110 @@
+<header class="site-header">
+  <h1 class="logo" onclick="goHome()">🌼 Haneul Academy</h1>
+  <nav id="main-nav">
+    <a href="notice.html">공지사항</a>
+    <a href="question.html">질문 게시판</a>
+    <a href="assignment.html">과제 게시판</a>
+    <a href="login.html" id="login-link">로그인</a>
+    <a href="register.html" id="register-link">회원가입</a>
+    <a href="#" id="logout-link" style="display:none;">로그아웃</a>
+  </nav>
+  <div class="menu-toggle" id="menu-toggle">☰</div>
+</header>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  .site-header {
+    width: 100%;
+    background: #4c9aff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    box-shadow: 0 0.2vh 0.5vh rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap; /* 줄바꿈 방지 */
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: 0.3s ease;
+  }
+
+  nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: 0.2s;
+  }
+
+  nav a:hover {
+    text-decoration: underline;
+  }
+
+  .menu-toggle {
+    display: none;
+    font-size: 2rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  /* 📱 데스크탑에서 900px 이하일 때 메뉴 접기 시작 */
+  @media (max-width: 900px) {
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1rem 1.5rem;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    nav {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      background: #5aa8ff;
+      border-radius: 6px;
+      margin-top: 0.5rem;
+      padding: 0.8rem 0;
+      gap: 0.8rem;
+      box-shadow: 0 0.3vh 0.5vh rgba(0,0,0,0.1);
+    }
+
+    nav a {
+      font-size: 1rem;
+      padding: 0.6rem 1rem;
+      display: block;
+      width: 100%;
+    }
+
+    .menu-toggle {
+      display: block;
+      position: absolute;
+      right: 1.5rem;
+      top: 1rem;
+    }
+
+    nav.open {
+      display: flex;
+    }
+  }
+</style>
