@@ -38,6 +38,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     const result = await sessionRes.json();
 
+    // 로그인되지 않은 상태에서 게시판에 접근하면 로그인 페이지로 리다이렉트
+    if (!result.logged_in && window.location.pathname !== '/login.html') {
+      window.location.href = 'login.html';  // 로그인 페이지로 이동
+    }
+
     // UI 업데이트 함수
     const updateUI = (isLoggedIn) => {
       const guestView = document.getElementById("guest-view");

@@ -48,9 +48,8 @@
   </style>
 </head>
 <body>
-  <header>
-    <h1>게시물 상세</h1>
-  </header>
+  <!-- 헤더와 공통 UI 처리 스크립트 -->
+  <script src="./js/common.js" defer></script>   <!-- 헤더 로딩 및 메뉴 토글 처리 -->
 
   <main id="post-content">
     <!-- 게시물 상세 내용이 여기에 표시됩니다. -->
@@ -64,5 +63,21 @@
 
   <!-- board-detail.js 스크립트 추가 -->
   <script src="./js/board-detail.js" defer></script>
+
+  <script>
+    // URL에서 'type' 파라미터 가져오기
+    const params = new URLSearchParams(window.location.search);
+    const boardType = params.get("type");
+
+    // 게시판 제목 동적 표시
+    const headerTitle = document.querySelector('header h1');
+    if (boardType === "notice") {
+      headerTitle.innerText = "공지사항 게시판 - 게시물 상세";
+    } else if (boardType === "qna") {
+      headerTitle.innerText = "질문 게시판 - 게시물 상세";
+    } else if (boardType === "homework") {
+      headerTitle.innerText = "과제 게시판 - 게시물 상세";
+    }
+  </script>
 </body>
 </html>

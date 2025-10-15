@@ -13,68 +13,188 @@
       margin: 0;
       padding: 0;
     }
-
     header {
       background: #4c9aff;
       color: white;
       padding: 1rem 2rem;
-    }
-
-    nav ul {
       display: flex;
-      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-
-    nav ul li {
-      list-style: none;
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
     }
-
-    nav ul li a {
+    nav a {
       color: white;
       text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: 500;
+    }
+    nav a:hover { text-decoration: underline; }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 4rem 1rem;
+    }
+    main h2 {
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+    main p {
+      color: #555;
+      margin-bottom: 2.5rem;
       font-size: 1.1rem;
     }
-
-    nav ul li a:hover {
-      text-decoration: underline;
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
     }
-
-    #board-content {
-      padding: 2rem;
+    .btn {
+      padding: 0.8rem 1.8rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+      transition: 0.25s;
+    }
+    .btn-login {
+      background: #4c9aff;
+      color: white;
+    }
+    .btn-register {
       background: white;
-      margin-top: 1rem;
+      color: #4c9aff;
+      border: 2px solid #4c9aff;
     }
-
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
     footer {
       background: #f2f7ff;
       text-align: center;
-      padding: 1rem;
+      padding: 1rem 0;
       color: #777;
+      font-size: 0.9rem;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .card-container {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      width: 250px;
+      cursor: pointer;
+      transition: 0.25s;
+      text-align: center;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(76,154,255,0.25);
+    }
+
+    .card h3 {
+      color: #4c9aff;
+      margin-bottom: 0.6rem;
+    }
+
+    .card p {
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    /* 반응형 */
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.3rem; }
+      nav a { margin-left: 0.8rem; font-size: 0.9rem; }
+      main h2 { font-size: 1.5rem; }
+      .btn { padding: 0.7rem 1.2rem; font-size: 0.9rem; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>게시판</h1>
-  </header>
+  <!-- 헤더와 공통 UI 처리 스크립트 -->
+  <script src="./js/common.js" defer></script>   <!-- 헤더 로딩 및 메뉴 토글 처리 -->
 
-  <nav>
-    <ul>
-      <li><a href="board.html?type=notice">공지사항</a></li>
-      <li><a href="board.html?type=qna">질문 게시판</a></li>
-      <li><a href="board.html?type=homework">과제 게시판</a></li>
-    </ul>
-  </nav>
+  <main>
+    <h2 id="board-title"></h2> <!-- 게시판 제목을 여기에 동적으로 표시 -->
 
-  <main id="board-content">
-    <!-- 게시판 목록이 여기에 동적으로 표시됩니다. -->
+    <!-- 비로그인 상태에서 보이는 화면 -->
+    <div id="guest-view">
+      <h2>환영합니다 🌟</h2>
+      <p>학생과 선생님이 함께 성장하는 공간,<br>하늘 아카데미 게시판입니다.</p>
+
+      <div class="btn-group">
+        <button class="btn btn-login" onclick="goTo('login.html')">로그인</button>
+        <button class="btn btn-register" onclick="goTo('register.html')">회원가입</button>
+      </div>
+    </div>
+
+    <!-- 로그인 후 보이는 화면 -->
+    <div id="user-view" style="display:none;">
+      <h2>게시판 목록 📚</h2>
+      <div class="card-container">
+        <div class="card" onclick="goTo('board.html?type=notice')">
+          <h3>공지사항</h3>
+          <p>학원 내 주요 공지사항을 확인하세요.</p>
+        </div>
+        <div class="card" onclick="goTo('board.html?type=qna')">
+          <h3>질문 게시판</h3>
+          <p>궁금한 점을 자유롭게 질문하세요.</p>
+        </div>
+        <div class="card" onclick="goTo('board.html?type=homework')">
+          <h3>과제 게시판</h3>
+          <p>과제 제출 및 피드백을 확인하세요.</p>
+        </div>
+      </div>
+    </div>
   </main>
 
   <footer>
-    <p>&copy; 2025 게시판</p>
+    © 2025 Haneul Academy Board · All Rights Reserved.
   </footer>
 
-  <!-- board.js 스크립트 추가 -->
-  <script src="./js/board.js" defer></script>
+  <script>
+    function goTo(page) {
+      window.location.href = page;
+    }
+
+    // URL에서 'type' 파라미터 가져오기
+    const params = new URLSearchParams(window.location.search);
+    const boardType = params.get("type");
+
+    // 각 게시판의 이름을 동적으로 설정
+    const boardTitle = document.getElementById("board-title");
+    if (boardType === "notice") {
+      boardTitle.innerText = "공지사항 게시판";
+    } else if (boardType === "qna") {
+      boardTitle.innerText = "질문 게시판";
+    } else if (boardType === "homework") {
+      boardTitle.innerText = "과제 게시판";
+    } else {
+      boardTitle.innerText = "게시판";
+    }
+  </script>
 </body>
 </html>
