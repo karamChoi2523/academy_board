@@ -58,15 +58,33 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // 4️⃣ 로그아웃 이벤트
-  if (logoutLink) {
-    logoutLink.addEventListener("click", async (e) => {
-      e.preventDefault();
-      await fetch("/api/auth/logout.php", {
+if (logoutLink) {
+  logoutLink.addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    try {
+      // 로그아웃 요청
+      const res = await fetch("/api/auth/logout.php", {
         method: "POST",
         credentials: "include" // 세션 쿠키 포함
       });
-      alert("로그아웃 되었습니다.");
-      window.location.reload();
-    });
-  }
+
+      const result = await res.json();
+
+      if (result.success) {
+        // 로그아웃 후 세션 쿠키 삭제
+        document.cookie = "PHPSESSID=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;"; // 세션 쿠키 삭제
+        alert("로그아웃 되었습니다.");
+
+        // 페이지 새로고침
+        window.location.reload();
+      } else {
+        alert("로그아웃 중 오류가 발생했습니다.");
+      }
+    } catch (err) {
+      console.error("로그아웃 실패:", err);
+      alert("로그아웃 처리에 문제가 발생했습니다.");
+    }
+  });
+}
 });
