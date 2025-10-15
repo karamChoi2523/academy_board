@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // ✅ 1️⃣ .env 파일 로드
-$envPath = __DIR__ . '/../../.env'; // 프로젝트 루트 기준
+$envPath = __DIR__ . '/../.env'; // 프로젝트 루트 기준
 if (file_exists($envPath)) {
     $lines = file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     foreach ($lines as $line) {
