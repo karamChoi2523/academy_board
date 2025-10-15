@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 2️⃣ 로드 후 요소 참조
     const loginLink = document.getElementById("login-link");
     const registerLink = document.getElementById("register-link");
-    const logoutLink = document.getElementById("logout-link");
+    const logoutLink = document.getElementById("logout-link");  // 이 부분을 여기에서 참조
     const menuToggle = document.getElementById("menu-toggle");
     const nav = document.getElementById("main-nav");
 
