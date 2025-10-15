@@ -6,7 +6,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     sendResponse(false, '잘못된 요청 방식입니다.');
 }
 
-$data = json_decode(file_get_contents('php://input'), true);
+//$data = json_decode(file_get_contents('php://input'), true);
+$data = $_POST;
 
 $email = trim($data['email'] ?? '');
 $password = $data['password'] ?? '';
