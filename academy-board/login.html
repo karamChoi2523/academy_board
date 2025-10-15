@@ -195,8 +195,9 @@
         const result = await res.json();
 
         if (result.success) {
-          localStorage.setItem("user", JSON.stringify(result.data.user));
           window.location.href = "index.html";
+        }else{
+          alert(result.message);
         }
       } catch (err) {
         alert("서버 연결에 문제가 있습니다. 잠시 후 다시 시도해주세요.");
