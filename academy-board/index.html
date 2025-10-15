@@ -138,16 +138,18 @@
 <body>
   <script src="./js/common.js" defer></script>
   <main>
-    <div id="guest-view">
-        <h2>환영합니다 🌟</h2>
-        <p>학생과 선생님이 함께 성장하는 공간,<br>하늘 아카데미 게시판입니다.</p>
+  <!-- 비로그인 상태에서 보이는 화면 -->
+  <div id="guest-view">
+    <h2>환영합니다 🌟</h2>
+    <p>학생과 선생님이 함께 성장하는 공간,<br>하늘 아카데미 게시판입니다.</p>
 
-        <div class="btn-group">
-          <button class="btn btn-login" onclick="goTo('login.html')">로그인</button>
-          <button class="btn btn-register" onclick="goTo('register.html')">회원가입</button>
-        </div>
+    <div class="btn-group">
+      <button class="btn btn-login" onclick="goTo('login.html')">로그인</button>
+      <button class="btn btn-register" onclick="goTo('register.html')">회원가입</button>
     </div>
-    <!-- 로그인 후 화면 -->
+  </div>
+
+  <!-- 로그인 후 보이는 화면 -->
   <div id="user-view" style="display:none;">
     <h2>게시판 목록 📚</h2>
     <div class="card-container">
@@ -165,7 +167,8 @@
       </div>
     </div>
   </div>
-  </main>
+</main>
+
 
   <footer>
     © 2025 Haneul Academy Board · All Rights Reserved.

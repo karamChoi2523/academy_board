@@ -1,4 +1,3 @@
-// ✅ 공통 헤더 로드 + 로그인 상태 유지 통합 스크립트
 document.addEventListener("DOMContentLoaded", async () => {
   const headerContainer = document.createElement("div");
   document.body.prepend(headerContainer);
@@ -27,45 +26,47 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // 3️⃣ 세션 확인 요청 (쿠키 포함 필수!)
-    try {
-      const sessionRes = await fetch("/api/auth/check_session.php", {
-        method: "GET",
-        credentials: "include" // ⚡ 세션 쿠키 유지 (Firefox, Chrome 둘 다)
-      });
-      const result = await sessionRes.json();
+    const sessionRes = await fetch("/api/auth/check_session.php", {
+      method: "GET",
+      credentials: "include" // 세션 쿠키 포함
+    });
+    const result = await sessionRes.json();
 
-      if (result.logged_in) {
-        // ✅ 로그인 상태
-        if (loginLink) loginLink.style.display = "none";
-        if (registerLink) registerLink.style.display = "none";
-        if (logoutLink) logoutLink.style.display = "inline-block";
+    if (result.logged_in) {
+      // ✅ 로그인 상태일 때
+      if (loginLink) loginLink.style.display = "none";
+      if (registerLink) registerLink.style.display = "none";
+      if (logoutLink) logoutLink.style.display = "inline-block";
 
-        // 예시: 닉네임 표시 (선택)
-        console.log(`🔹 로그인됨: ${result.user.nickname} (${result.user.role})`);
-      } else {
-        // ❌ 비로그인 상태
-        if (loginLink) loginLink.style.display = "inline-block";
-        if (registerLink) registerLink.style.display = "inline-block";
-        if (logoutLink) logoutLink.style.display = "none";
-      }
-    } catch (err) {
-      console.error("세션 확인 실패:", err);
+      // 로그인 후 `user-view` 표시, `guest-view` 숨기기
+      document.getElementById("guest-view").style.display = "none";
+      document.getElementById("user-view").style.display = "block";
+
+      console.log(`🔹 로그인됨: ${result.user.nickname} (${result.user.role})`);
+    } else {
+      // ❌ 비로그인 상태일 때
+      if (loginLink) loginLink.style.display = "inline-block";
+      if (registerLink) registerLink.style.display = "inline-block";
+      if (logoutLink) logoutLink.style.display = "none";
+
+      // 비로그인 상태에서 `user-view` 숨기고 `guest-view` 보이게 설정
+      document.getElementById("guest-view").style.display = "block";
+      document.getElementById("user-view").style.display = "none";
     }
-
-    // 4️⃣ 로그아웃 이벤트
-    if (logoutLink) {
-      logoutLink.addEventListener("click", async (e) => {
-        e.preventDefault();
-        await fetch("/api/auth/logout.php", {
-          method: "POST",
-          credentials: "include" // ⚡ 세션 쿠키 포함
-        });
-        alert("로그아웃 되었습니다.");
-        window.location.reload();
-      });
-    }
-
   } catch (err) {
-    console.error("헤더 로드 실패:", err);
+    console.error("세션 확인 실패:", err);
+  }
+
+  // 4️⃣ 로그아웃 이벤트
+  if (logoutLink) {
+    logoutLink.addEventListener("click", async (e) => {
+      e.preventDefault();
+      await fetch("/api/auth/logout.php", {
+        method: "POST",
+        credentials: "include" // 세션 쿠키 포함
+      });
+      alert("로그아웃 되었습니다.");
+      window.location.reload();
+    });
   }
 });
