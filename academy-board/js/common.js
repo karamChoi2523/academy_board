@@ -28,7 +28,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 3️⃣ 세션 확인 요청 (쿠키 포함 필수!)
     const sessionRes = await fetch("/api/auth/check_session.php", {
       method: "GET",
-      credentials: "include" // 세션 쿠키 포함
+      credentials: "include", // 세션 쿠키 포함
+      cache: "no-store" // 캐시 사용 안 함
     });
     const result = await sessionRes.json();
 
@@ -72,8 +73,6 @@ if (logoutLink) {
       const result = await res.json();
 
       if (result.success) {
-        // 로그아웃 후 세션 쿠키 삭제
-        document.cookie = "PHPSESSID=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;"; // 세션 쿠키 삭제
         alert("로그아웃 되었습니다.");
 
         // 페이지 새로고침
