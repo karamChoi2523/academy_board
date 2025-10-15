@@ -59,32 +59,48 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // 4️⃣ 로그아웃 이벤트
-// 로그아웃 이벤트
-if (logoutLink) {
-  logoutLink.addEventListener("click", async (e) => {
-    e.preventDefault();
+  if (logoutLink) {
+    logoutLink.addEventListener("click", async (e) => {
+      e.preventDefault();
 
-    try {
-      // 로그아웃 요청
-      const res = await fetch("/api/auth/logout.php", {
-        method: "POST",
-        credentials: "include" // 세션 쿠키 포함
-      });
+      try {
+        // 로그아웃 요청
+        const res = await fetch("/api/auth/logout.php", {
+          method: "POST",
+          credentials: "include" // 세션 쿠키 포함
+        });
 
-      const result = await res.json();
+        const result = await res.json();
 
-      if (result.success) {
-        alert("로그아웃 되었습니다.");
+        if (result.success) {
+          alert("로그아웃 되었습니다.");
 
-        // 페이지 새로 고침
-        window.location.href = window.location.href; // 새로고침
-      } else {
-        alert("로그아웃 중 오류가 발생했습니다.");
+          // 로그아웃 후 세션 확인 요청
+          const sessionRes = await fetch("/api/auth/check_session.php", {
+            method: "GET",
+            credentials: "include", // 세션 쿠키 포함
+            cache: "no-store"
+          });
+
+          const sessionResult = await sessionRes.json();
+
+          if (!sessionResult.logged_in) {
+            // 로그아웃 상태에서 `guest-view` 보이고 `user-view` 숨기기
+            document.getElementById("guest-view").style.display = "block";
+            document.getElementById("user-view").style.display = "none";
+
+            // 로그인, 회원가입 버튼 보이게 하고 로그아웃 버튼 숨기기
+            if (loginLink) loginLink.style.display = "inline-block";
+            if (registerLink) registerLink.style.display = "inline-block";
+            if (logoutLink) logoutLink.style.display = "none";
+          }
+        } else {
+          alert("로그아웃 중 오류가 발생했습니다.");
+        }
+      } catch (err) {
+        console.error("로그아웃 실패:", err);
+        alert("로그아웃 처리에 문제가 발생했습니다.");
       }
-    } catch (err) {
-      console.error("로그아웃 실패:", err);
-      alert("로그아웃 처리에 문제가 발생했습니다.");
-    }
-  });
-}
+    });
+  }
 });
