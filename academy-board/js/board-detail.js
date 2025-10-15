@@ -1,0 +1,73 @@
+document.addEventListener("DOMContentLoaded", async () => {
+  const params = new URLSearchParams(window.location.search);
+  const postId = params.get("id"); // 게시물 ID 가져오기
+
+  const postContent = document.getElementById("post-content");
+  const deleteBtn = document.getElementById("delete-btn");
+
+  // 게시물 상세 내용 불러오기
+  await loadPostDetails(postId, postContent, deleteBtn);
+});
+
+/**
+ * 게시물 상세 내용 로딩 함수
+ * @param {string} postId - 게시물 ID
+ * @param {HTMLElement} postContent - 콘텐츠를 삽입할 HTML 요소
+ * @param {HTMLElement} deleteBtn - 삭제 버튼
+ */
+async function loadPostDetails(postId, postContent, deleteBtn) {
+  try {
+    const response = await fetch(`/api/post/read.php?id=${postId}`);
+    const data = await response.json();
+
+    if (data && data.title) {
+      postContent.innerHTML = `
+        <h2>${data.title}</h2>
+        <p>${data.content}</p>
+        <p><strong>작성일:</strong> ${data.created_at}</p>
+      `;
+
+      // 삭제 버튼 보이게 하기
+      deleteBtn.style.display = "inline-block";
+      deleteBtn.addEventListener("click", async () => {
+        const confirmDelete = confirm("정말로 삭제하시겠습니까?");
+        if (confirmDelete) {
+          await deletePost(postId);
+        }
+      });
+    } else {
+      postContent.innerHTML = "<p>게시물이 존재하지 않거나 오류가 발생했습니다.</p>";
+    }
+  } catch (error) {
+    console.error('게시물 상세 로딩 오류:', error);
+    postContent.innerHTML = "<p>게시물 상세 정보를 불러오는 데 오류가 발생했습니다.</p>";
+  }
+}
+
+/**
+ * 게시물 삭제 함수
+ * @param {string} postId - 게시물 ID
+ */
+async function deletePost(postId) {
+  try {
+    const response = await fetch('/api/post/delete.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: postId }),
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      alert('게시물이 삭제되었습니다.');
+      window.location.href = 'board.html'; // 게시판 목록 페이지로 리다이렉트
+    } else {
+      alert('게시물 삭제에 실패했습니다.');
+    }
+  } catch (error) {
+    console.error('삭제 오류:', error);
+    alert('삭제 처리에 문제가 발생했습니다.');
+  }
+}
