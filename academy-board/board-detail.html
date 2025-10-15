@@ -48,8 +48,9 @@
   </style>
 </head>
 <body>
-  <!-- 헤더와 공통 UI 처리 스크립트 -->
-  <script src="./js/common.js" defer></script>   <!-- 헤더 로딩 및 메뉴 토글 처리 -->
+  <header>
+    <h1>게시물 상세</h1>
+  </header>
 
   <main id="post-content">
     <!-- 게시물 상세 내용이 여기에 표시됩니다. -->
@@ -61,10 +62,15 @@
     <p>&copy; 2025 게시판</p>
   </footer>
 
-  <!-- board-detail.js 스크립트 추가 -->
   <script src="./js/board-detail.js" defer></script>
 
   <script>
+    // 로그인 상태 확인 및 리다이렉트
+    if (!sessionStorage.getItem('isLoggedIn')) {
+      alert("로그인 후에 이용해주세요.");
+      window.location.href = "login.html";  // 로그인 페이지로 이동
+    }
+
     // URL에서 'type' 파라미터 가져오기
     const params = new URLSearchParams(window.location.search);
     const boardType = params.get("type");

@@ -38,9 +38,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     const result = await sessionRes.json();
 
-    // 로그인되지 않은 상태에서 게시판에 접근하면 로그인 페이지로 리다이렉트
+    // 4️⃣ index.html 로딩 시 로그인되지 않은 경우 로그인 페이지로 리다이렉트
     if (!result.logged_in && window.location.pathname !== '/login.html') {
-      window.location.href = 'login.html';  // 로그인 페이지로 이동
+      window.location.href = 'index.html';  // 로그인되지 않은 경우 메인 페이지로 리다이렉트
     }
 
     // UI 업데이트 함수
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log(`🔹 로그인됨: ${result.user.nickname} (${result.user.role})`);
     }
 
-    // 4️⃣ 로그아웃 이벤트 (try 블록 안으로 이동!)
+    // 5️⃣ 로그아웃 이벤트 (try 블록 안으로 이동!)
     if (logoutLink) {
       logoutLink.addEventListener("click", async (e) => {
         e.preventDefault();
