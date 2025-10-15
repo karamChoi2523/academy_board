@@ -91,41 +91,6 @@
       border-top: 1px solid #e2e8f0;
     }
 
-    .card-container {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 2rem;
-}
-
-.card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  padding: 1.5rem;
-  width: 250px;
-  cursor: pointer;
-  transition: 0.25s;
-  text-align: center;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 16px rgba(76,154,255,0.25);
-}
-
-.card h3 {
-  color: #4c9aff;
-  margin-bottom: 0.6rem;
-}
-
-.card p {
-  color: #555;
-  font-size: 0.95rem;
-}
-
-
     /* 반응형 */
     @media (max-width: 600px) {
       header h1 { font-size: 1.3rem; }
@@ -138,8 +103,6 @@
 <body>
   <script src="./js/common.js" defer></script>
   <main>
-  <!-- 비로그인 상태에서 보이는 화면 -->
-  <div id="guest-view">
     <h2>환영합니다 🌟</h2>
     <p>학생과 선생님이 함께 성장하는 공간,<br>하늘 아카데미 게시판입니다.</p>
 
@@ -147,28 +110,7 @@
       <button class="btn btn-login" onclick="goTo('login.html')">로그인</button>
       <button class="btn btn-register" onclick="goTo('register.html')">회원가입</button>
     </div>
-  </div>
-
-  <!-- 로그인 후 보이는 화면 -->
-  <div id="user-view" style="display:none;">
-    <h2>게시판 목록 📚</h2>
-    <div class="card-container">
-      <div class="card" onclick="goTo('notice.html')">
-        <h3>공지사항</h3>
-        <p>학원 내 주요 공지사항을 확인하세요.</p>
-      </div>
-      <div class="card" onclick="goTo('qna.html')">
-        <h3>질문 게시판</h3>
-        <p>궁금한 점을 자유롭게 질문하세요.</p>
-      </div>
-      <div class="card" onclick="goTo('homework.html')">
-        <h3>과제 게시판</h3>
-        <p>과제 제출 및 피드백을 확인하세요.</p>
-      </div>
-    </div>
-  </div>
-</main>
-
+  </main>
 
   <footer>
     © 2025 Haneul Academy Board · All Rights Reserved.
