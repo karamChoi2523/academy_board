@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     const result = await sessionRes.json();
 
-    // 로그인된 경우 UI 업데이트
+    // UI 업데이트 함수
     const updateUI = (isLoggedIn) => {
       const guestView = document.getElementById("guest-view");
       const userView = document.getElementById("user-view");
@@ -63,17 +63,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 초기 UI 설정
     updateUI(result.logged_in);
 
-    // 로그인되지 않았을 때 게시판 페이지로 접근하면 로그인 페이지로 리다이렉트
-    if (!result.logged_in && window.location.pathname !== '/login.html') {
-      alert("로그인 후 사용해주세요.");
-      window.location.href = "login.html";  // 로그인 페이지로 이동
-    }
-
     if (result.logged_in) {
       console.log(`🔹 로그인됨: ${result.user.nickname} (${result.user.role})`);
     }
 
-    // 4️⃣ 로그아웃 이벤트 (try 블록 안으로 이동!)
+    // 4️⃣ 로그인 페이지 외에서 로그인되지 않은 경우만 리다이렉트
+    if (!result.logged_in && window.location.pathname !== '/login.html' && window.location.pathname !== '/index.html') {
+      alert("로그인 후 사용해주세요.");
+      window.location.href = "login.html";  // 로그인 페이지로 이동
+    }
+
+    // 5️⃣ 로그아웃 이벤트
     if (logoutLink) {
       logoutLink.addEventListener("click", async (e) => {
         e.preventDefault();
