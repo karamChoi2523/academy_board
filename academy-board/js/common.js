@@ -6,12 +6,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 1️⃣ header.html 불러오기
     const res = await fetch("header.html");
     const html = await res.text();
-    headerContainer.innerHTML = html;
+    headerContainer.innerHTML = html;  // header.html을 로드하고 HTML을 삽입
 
-    // 2️⃣ 로드 후 요소 참조
+    // 2️⃣ 로드 후 요소 참조 (여기서 `logout-link` 참조)
     const loginLink = document.getElementById("login-link");
     const registerLink = document.getElementById("register-link");
-    const logoutLink = document.getElementById("logout-link");  // 이 부분을 여기에서 참조
+    const logoutLink = document.getElementById("logout-link");  // 여기서 참조
     const menuToggle = document.getElementById("menu-toggle");
     const nav = document.getElementById("main-nav");
 
