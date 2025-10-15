@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // 4️⃣ 로그아웃 이벤트
+// 로그아웃 이벤트
 if (logoutLink) {
   logoutLink.addEventListener("click", async (e) => {
     e.preventDefault();
@@ -75,8 +76,8 @@ if (logoutLink) {
       if (result.success) {
         alert("로그아웃 되었습니다.");
 
-        // 페이지 새로고침
-        window.location.reload();
+        // 페이지 새로 고침
+        window.location.href = window.location.href; // 새로고침
       } else {
         alert("로그아웃 중 오류가 발생했습니다.");
       }
