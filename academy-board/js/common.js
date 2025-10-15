@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (registerLink) registerLink.style.display = "none";
         if (logoutLink) logoutLink.style.display = "inline-block";
 
+        // 예시: 닉네임 표시 (선택)
         console.log(`🔹 로그인됨: ${result.user.nickname} (${result.user.role})`);
       } else {
         // ❌ 비로그인 상태
