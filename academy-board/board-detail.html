@@ -155,11 +155,12 @@ async function loadPostDetails(postId) {
       <p><strong>카테고리:</strong> ${data.category}</p> <!-- 카테고리 추가 -->
       <p><strong>작성자:</strong> ${data.author_nickname}</p> <!-- 작성자 추가 -->
     `;
-
+    /*
     if (data.attachment_path) {
       const attachmentLink = `<a href="/uploads/${data.attachment_path}" download>첨부파일 다운로드</a>`;
       document.getElementById("attachment-link").innerHTML = attachmentLink;
     }
+    */
 
     // 게시물 작성자와 로그인한 사용자가 일치하는지 확인
     const loggedInUserId = sessionStorage.getItem('userId');  // 로그인한 사용자의 ID
