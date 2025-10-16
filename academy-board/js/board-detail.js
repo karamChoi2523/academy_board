@@ -93,6 +93,7 @@ async function loadPostDetails(postId, postContent, deleteBtn, editBtn) {
  * @param {string} postId - 게시물 ID
  */
 async function deletePost(postId, boardType) {
+  console.log("js deletePost", boardType);
   try {
     const response = await fetch('/api/post/delete.php', {
       method: 'POST',
