@@ -118,6 +118,13 @@
         window.location.href = "login.html"; // 로그인 페이지로 이동
       }
 
+      // `create.html`에서 `boardType` 파라미터 받기
+      const params = new URLSearchParams(window.location.search);
+      const boardType = params.get("type"); // 'notice', 'question', 'assignment' 중 하나가 나옵니다.
+
+      // 게시물 작성 폼에 boardType을 포함시켜 서버로 전달
+      console.log(boardType); // 확인용
+
       // 폼 제출 처리
       document
         .getElementById("postForm")
@@ -130,8 +137,8 @@
           const postData = {
             title,
             content,
-            board_type: "notice", // 기본값 'notice'로 설정
-            user_id: sessionStorage.getItem("user_id"), // 로그인한 사용자 ID (예시)
+            board_type: boardType,
+            user_id: sessionStorage.getItem("user_id"), // 로그인된 사용자 ID
           };
 
           try {
@@ -147,7 +154,8 @@
 
             if (result.success) {
               alert("게시물이 작성되었습니다.");
-              window.location.href = "board.html"; // 게시판 목록으로 리다이렉트
+              // 게시글 작성 후 해당 boardType에 맞는 board.html로 리다이렉트
+              window.location.href = `board.html?type=${boardType}`; // boardType을 URL에 추가
             } else {
               alert("게시물 작성에 실패했습니다.");
             }
