@@ -73,7 +73,7 @@ async function deletePost(postId) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id: postId }),
+      body: JSON.stringify({ id: postId }),  // JSON 형식으로 ID 전달
     });
 
     const data = await response.json();
@@ -89,3 +89,4 @@ async function deletePost(postId) {
     alert('삭제 처리에 문제가 발생했습니다.');
   }
 }
+
