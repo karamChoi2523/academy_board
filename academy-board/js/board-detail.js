@@ -23,30 +23,46 @@ async function loadPostDetails(postId, postContent, deleteBtn, editBtn) {
     const data = await response.json();
 
     if (data && data.title) {
-      postContent.innerHTML = `
-        <h2>${data.title}</h2>
-        <p>${data.content}</p>
-        <p><strong>작성일:</strong> ${data.created_at}</p>
-        <p><strong>카테고리:</strong> ${data.category ?? '없음'}</p>
-        <p><strong>작성자:</strong> ${data.author_nickname ?? '익명'}</p>
-      `;
-
-      // ✅ 첨부파일 표시
-      const attachmentLinkContainer = document.getElementById("attachment-link");
+      // 파일 링크 HTML 미리 준비
+      let attachmentHTML = "";
       if (data.attachment_path) {
         const fileUrl = `/uploads/${data.attachment_path}`;
-        attachmentLinkContainer.innerHTML = `
-          <p><strong>첨부파일:</strong>
-            <a href="${fileUrl}" download="${data.attachment_name}">
-              ${data.attachment_name}
-            </a>
-          </p>
-        `;
-      } else {
-        attachmentLinkContainer.innerHTML = "";
+        const fileName = data.attachment_name ?? "첨부파일";
+        // 확장자 확인해서 이미지면 미리보기 표시
+        const ext = fileName.split('.').pop().toLowerCase();
+        if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) {
+          attachmentHTML = `
+            <div style="margin-top: 1.5rem;">
+              <p><strong>첨부 이미지:</strong></p>
+              <img src="${fileUrl}" alt="${fileName}" style="max-width: 100%; border-radius: 8px; margin-top: 0.5rem;">
+              <p><a href="${fileUrl}" download="${fileName}" style="color:#4c9aff;">📥 ${fileName} 다운로드</a></p>
+            </div>
+          `;
+        } else {
+          // 이미지가 아닌 경우
+          attachmentHTML = `
+            <div style="margin-top: 1.5rem;">
+              <p><strong>첨부파일:</strong>
+                <a href="${fileUrl}" download="${fileName}" style="color:#4c9aff;">📎 ${fileName}</a>
+              </p>
+            </div>
+          `;
+        }
       }
 
-      // ✅ 작성자 확인 후 버튼 표시
+      // 본문 + 첨부파일 표시
+      postContent.innerHTML = `
+        <h2>${data.title}</h2>
+        <div style="margin:1rem 0; line-height:1.6;">${data.content}</div>
+        ${attachmentHTML}
+        <p style="margin-top:1.5rem; font-size:0.9rem; color:#666;">
+          <strong>작성일:</strong> ${data.created_at} &nbsp;|&nbsp;
+          <strong>카테고리:</strong> ${data.category ?? '없음'} &nbsp;|&nbsp;
+          <strong>작성자:</strong> ${data.author_nickname ?? '익명'}
+        </p>
+      `;
+
+      // 작성자 확인 후 버튼 표시
       const loggedInUserId = sessionStorage.getItem('user_id');
       if (data.user_id == loggedInUserId) {
         editBtn.style.display = "inline-block";
@@ -71,7 +87,6 @@ async function loadPostDetails(postId, postContent, deleteBtn, editBtn) {
     postContent.innerHTML = "<p>게시물 상세 정보를 불러오는 데 오류가 발생했습니다.</p>";
   }
 }
-
 
 /**
  * 게시물 삭제 함수
