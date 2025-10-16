@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     updateUI(result.logged_in);
 
     // 로그인되지 않으면 로그인 페이지로 리다이렉트
-    if (!result.logged_in && window.location.pathname !== '/login.html') {
+    if (!result.logged_in && window.location.pathname !== '/index.html' && window.location.pathname !== '/login.html') {
       alert("로그인 후 사용해주세요.");
       window.location.href = "login.html";  // 로그인 페이지로 이동
     }
