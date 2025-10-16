@@ -31,9 +31,11 @@ async function loadPostDetails(postId, postContent, deleteBtn, editBtn) {
         <p><strong>작성자:</strong> ${data.author_nickname}</p> <!-- 작성자 추가 -->
       `;
 
-      // 게시물 작성자와 로그인한 사용자가 일치하는지 확인
-      const loggedInUserId = sessionStorage.getItem('userId');  // 로그인한 사용자의 ID
-      if (data.user_id == loggedInUserId) { // ==로 비교하여 타입 불일치 문제 해결
+      // 로그인한 사용자의 user_id를 세션에서 가져옵니다.
+      const loggedInUserId = sessionStorage.getItem('user_id');  // 세션에 저장된 사용자 ID
+      console.log("Logged in user ID:", loggedInUserId); // 로그로 세션 값 확인
+
+      if (data.user_id == loggedInUserId) { // 비교 시 == 사용하여 타입 일치시킴
         // 작성자일 경우 수정/삭제 버튼 활성화
         editBtn.style.display = "inline-block";
         deleteBtn.style.display = "inline-block";
