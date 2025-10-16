@@ -39,21 +39,45 @@ async function loadBoardList(boardType, boardContent) {
 
     if (data && data.length > 0) {
       const list = document.createElement('ul');
+      list.className = 'post-list';
+      
       data.forEach(post => {
         const listItem = document.createElement('li');
+        listItem.className = 'post-item';
+        
+        // 날짜 포맷팅
+        const date = new Date(post.created_at);
+        const formattedDate = formatDate(date);
+        
         listItem.innerHTML = `
-          <a href="board-detail.html?id=${post.id}">${post.title}</a>
-          <p>${post.created_at}</p>
+          <div class="post-content">
+            <div class="post-title">${escapeHtml(post.title)}</div>
+            <div class="post-meta">
+              <span class="post-meta-item author">👤 ${escapeHtml(post.nickname || '익명')}</span>
+              <span class="post-meta-item date">📅 ${formattedDate}</span>
+            </div>
+          </div>
+          <div class="post-info">
+            <div class="post-views">조회 ${post.views || 0}</div>
+            <div class="post-arrow">→</div>
+          </div>
         `;
+        
+        // 클릭 시 상세 페이지로 이동
+        listItem.addEventListener('click', () => {
+          window.location.href = `board-detail.html?id=${post.id}`;
+        });
+        
         list.appendChild(listItem);
       });
+      
       boardContent.appendChild(list);
     } else {
-      boardContent.innerHTML = "<p>게시물이 없습니다.</p>";
+      boardContent.innerHTML = '<div class="empty-message">게시물이 없습니다.</div>';
     }
   } catch (error) {
     console.error('게시물 목록 로딩 오류:', error);
-    boardContent.innerHTML = "<p>게시물 목록을 불러오는 데 오류가 발생했습니다.</p>";
+    boardContent.innerHTML = '<div class="empty-message">게시물을 불러오는 데 오류가 발생했습니다.</div>';
   }
 }
 function formatDate(date) {
