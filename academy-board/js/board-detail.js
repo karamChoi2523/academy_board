@@ -90,3 +90,73 @@ async function deletePost(postId) {
   }
 }
 
+// 댓글 작성
+document.getElementById("commentForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const content = document.getElementById("commentContent").value;
+  const postId = new URLSearchParams(window.location.search).get("id");
+  const userId = sessionStorage.getItem("user_id");
+
+  if (!content || !postId || !userId) {
+    alert("댓글을 작성할 수 없습니다.");
+    return;
+  }
+
+  const commentData = {
+    post_id: postId,
+    user_id: userId,
+    content: content,
+  };
+
+  try {
+    const response = await fetch("/api/comments/create_comment.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(commentData),
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      alert("댓글이 추가되었습니다.");
+      loadComments(postId);  // 댓글 목록 다시 불러오기
+    } else {
+      alert("댓글 작성에 실패했습니다.");
+    }
+  } catch (error) {
+    console.error("댓글 작성 오류:", error);
+    alert("댓글 작성 중 오류가 발생했습니다.");
+  }
+});
+
+// 댓글 조회
+async function loadComments(postId) {
+  const response = await fetch(`/api/comments/get_comments.php?post_id=${postId}`);
+  const comments = await response.json();
+
+  const commentsContainer = document.getElementById("commentsContainer");
+  commentsContainer.innerHTML = "";  // 기존 댓글 비우기
+
+  if (comments.length === 0) {
+    commentsContainer.innerHTML = "<p>댓글이 없습니다.</p>";
+    return;
+  }
+
+  comments.forEach((comment) => {
+    const commentElement = document.createElement("div");
+    commentElement.classList.add("comment");
+    commentElement.innerHTML = `
+      <p><strong>${comment.author_nickname}</strong> (${comment.created_at}):</p>
+      <p>${comment.content}</p>
+    `;
+    commentsContainer.appendChild(commentElement);
+  });
+}
+
+// 페이지 로드 시 댓글 불러오기
+const postId = new URLSearchParams(window.location.search).get("id");
+if (postId) {
+  loadComments(postId);  // 해당 게시물의 댓글을 불러옵니다.
+}

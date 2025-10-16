@@ -58,6 +58,42 @@
     #edit-btn:hover {
       background-color: #3d8bef;
     }
+
+    /* 댓글 스타일 */
+    .comment {
+  background: #f9f9f9;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.comment p {
+  margin: 0.5rem 0;
+}
+
+#commentContent {
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  background-color: #fafbfc;
+  margin-bottom: 1rem;
+}
+
+button {
+  padding: 0.8rem;
+  border: none;
+  background-color: #4c9aff;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #3a7fd4;
+}
+
   </style>
 </head>
 <body>
@@ -71,6 +107,17 @@
     <button id="edit-btn" style="display:none;">수정</button>
     <button id="delete-btn" style="display:none;">삭제</button>
   </div>
+
+  <h3>댓글 작성</h3>
+  <form id="commentForm">
+    <textarea id="commentContent" placeholder="댓글을 작성하세요" required></textarea>
+    <button type="submit">댓글 작성</button>
+  </form>
+
+  <h3>댓글 목록</h3>
+  <div id="commentsContainer"></div>
+
+
 
   <footer>
     <p>&copy; 2025 게시판</p>

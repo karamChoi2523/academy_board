@@ -1,46 +1,29 @@
 <?php
+// 데이터베이스 연결
 require_once '../../config/database.php';
 
-requireLogin();
+// 댓글 데이터 받기 (JSON 형식)
+$data = json_decode(file_get_contents("php://input"), true);
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    sendResponse(false, '잘못된 요청 방식입니다.');
+$postId = $data['post_id'] ?? null;
+$userId = $data['user_id'] ?? null;
+$content = $data['content'] ?? '';
+
+if (!$postId || !$userId || empty($content)) {
+    echo json_encode(['success' => false, 'message' => '필수 항목을 입력해주세요.']);
+    exit;
 }
 
-$data = json_decode(file_get_contents('php://input'), true);
+// 댓글 저장 쿼리
+$query = "INSERT INTO comments (post_id, user_id, content) VALUES (:post_id, :user_id, :content)";
+$stmt = $pdo->prepare($query);
+$stmt->bindParam(':post_id', $postId);
+$stmt->bindParam(':user_id', $userId);
+$stmt->bindParam(':content', $content);
 
-$postId = intval($data['post_id'] ?? 0);
-$content = trim($data['content'] ?? '');
-
-if ($postId <= 0) {
-    sendResponse(false, '유효하지 않은 게시글 ID입니다.');
-}
-
-if (empty($content)) {
-    sendResponse(false, '댓글 내용을 입력해주세요.');
-}
-
-// 게시글 존재 확인
-$stmt = $pdo->prepare("SELECT id FROM posts WHERE id = ?");
-$stmt->execute([$postId]);
-if (!$stmt->fetch()) {
-    sendResponse(false, '게시글을 찾을 수 없습니다.');
-}
-
-try {
-    $stmt = $pdo->prepare("
-        INSERT INTO comments (post_id, user_id, content) 
-        VALUES (?, ?, ?)
-        RETURNING id
-    ");
-    $stmt->execute([$postId, $_SESSION['user_id'], $content]);
-    $commentId = $stmt->fetch()['id'];
-    
-    sendResponse(true, '댓글이 작성되었습니다.', ['comment_id' => $commentId]);
-    
-} catch (PDOException $e) {
-    http_response_code(500);
-    sendResponse(false, '댓글 작성 중 오류가 발생했습니다.');
+if ($stmt->execute()) {
+    echo json_encode(['success' => true, 'message' => '댓글이 추가되었습니다.']);
+} else {
+    echo json_encode(['success' => false, 'message' => '댓글 추가에 실패했습니다.']);
 }
 ?>
