@@ -40,6 +40,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     };
 
+    // 로그인 상태를 sessionStorage에 저장
+    if (result.logged_in) {
+      sessionStorage.setItem('isLoggedIn', 'true');
+      sessionStorage.setItem('user', JSON.stringify(result.user)); // 유저 정보 저장
+    } else {
+      sessionStorage.removeItem('isLoggedIn');
+      sessionStorage.removeItem('user');
+    }
+
     // UI 설정
     updateUI(result.logged_in);
 
@@ -72,6 +81,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             // UI 즉시 업데이트
             updateUI(false);
+
+            // 세션 및 로컬스토리지 초기화
+            sessionStorage.removeItem('isLoggedIn');
+            sessionStorage.removeItem('user');
 
             // 메인 페이지로 이동
             setTimeout(() => {

@@ -189,6 +189,12 @@
       window.location.href = page;
     }
 
+    // 로그인 상태 확인 (common.js에서 처리)
+    if (!sessionStorage.getItem('isLoggedIn')) {
+      alert("로그인 후에 이용해주세요.");
+      window.location.href = "login.html";  // 로그인 페이지로 이동
+    }
+
     // URL에서 'type' 파라미터 가져오기
     const params = new URLSearchParams(window.location.search);
     const boardType = params.get("type");
