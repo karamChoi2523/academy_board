@@ -2,11 +2,14 @@
 // 데이터베이스 연결
 require_once '../../config/database.php';
 
-// POST 데이터 처리 (폼 데이터)
-$title = $_POST['title'] ?? '';
-$content = $_POST['content'] ?? '';
-$board_type = $_POST['board_type'] ?? 'notice';
-$user_id = $_POST['user_id'] ?? null; // 게시글 작성자 (로그인된 사용자 ID)
+// POST 데이터가 JSON 형식으로 들어올 경우 php://input을 사용하여 파싱
+$data = json_decode(file_get_contents('php://input'), true);
+
+// 폼 데이터 처리 (제목과 내용)
+$title = $data['title'] ?? '';
+$content = $data['content'] ?? '';
+$board_type = $data['board_type'] ?? 'notice';  // 기본값을 'notice'로 설정
+$user_id = $data['user_id'] ?? null; // 게시글 작성자 (로그인된 사용자 ID)
 
 if (empty($title) || empty($content)) {
     echo json_encode(['success' => false, 'message' => '제목과 내용을 입력해주세요.']);
