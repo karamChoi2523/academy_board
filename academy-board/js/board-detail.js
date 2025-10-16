@@ -27,13 +27,13 @@ async function loadPostDetails(postId, postContent, deleteBtn, editBtn) {
         <h2>${data.title}</h2>
         <p>${data.content}</p>
         <p><strong>작성일:</strong> ${data.created_at}</p>
-        <p><strong>카테고리:</strong> ${data.category}</p> <!-- 카테고리 추가 -->
+        <p><strong>카테고리:</strong> ${data.category}</p>
         <p><strong>작성자:</strong> ${data.author_nickname}</p> <!-- 작성자 추가 -->
       `;
 
       // 게시물 작성자와 로그인한 사용자가 일치하는지 확인
-      const loggedInUserId = sessionStorage.getItem('userId');  // 로그인한 사용자의 ID
-      if (data.user_id === loggedInUserId) {
+      const loggedInUserId = sessionStorage.getItem('user_id');  // 로그인한 사용자의 ID
+      if (data.user_id === loggedInUserId) { // 수정된 부분
         // 작성자일 경우 수정/삭제 버튼 활성화
         editBtn.style.display = "inline-block";
         deleteBtn.style.display = "inline-block";
