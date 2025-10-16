@@ -82,7 +82,7 @@
     // 로그인 상태 확인
     if (!sessionStorage.getItem('isLoggedIn')) {
       alert("로그인 후에 이용해주세요.");
-      window.location.href = "login.html";  // 로그인 페이지로 이동
+      window.location.href = "login.html";
     }
 
     const params = new URLSearchParams(window.location.search);
@@ -102,6 +102,8 @@
           <h2>${data.title}</h2>
           <p>${data.content}</p>
           <p><strong>작성일:</strong> ${data.created_at}</p>
+          <p><strong>카테고리:</strong> ${data.category}</p>
+          <p><strong>작성자:</strong> ${data.nickname}</p>
         `;
 
         // 게시물 작성자와 로그인한 사용자가 일치하는지 확인
