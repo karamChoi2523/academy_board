@@ -32,8 +32,8 @@ async function loadPostDetails(postId, postContent, deleteBtn, editBtn) {
       `;
 
       // 게시물 작성자와 로그인한 사용자가 일치하는지 확인
-      const loggedInUserId = sessionStorage.getItem('user_id');  // 로그인한 사용자의 ID
-      if (data.user_id === loggedInUserId) { // 수정된 부분
+      const loggedInUserId = sessionStorage.getItem('userId');  // 로그인한 사용자의 ID
+      if (data.user_id == loggedInUserId) { // ==로 비교하여 타입 불일치 문제 해결
         // 작성자일 경우 수정/삭제 버튼 활성화
         editBtn.style.display = "inline-block";
         deleteBtn.style.display = "inline-block";
