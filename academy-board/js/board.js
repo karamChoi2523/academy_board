@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // URL에서 파라미터 가져오기
   const params = new URLSearchParams(window.location.search);
-  boardType = params.get("type") || "notice";
+  const boardType = params.get("type") || "notice";
 /*
   // 게시판 제목 설정
   const boardTitle = document.getElementById("board-title");
