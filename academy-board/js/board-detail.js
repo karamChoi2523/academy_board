@@ -53,13 +53,13 @@ async function loadPostDetails(postId, postContent, deleteBtn, editBtn) {
       // 본문 + 첨부파일 표시
       postContent.innerHTML = `
         <h2>${data.title}</h2>
-        <div style="margin:1rem 0; line-height:1.6;">${data.content}</div>
-        ${attachmentHTML}
         <p style="margin-top:1.5rem; font-size:0.9rem; color:#666;">
           <strong>작성일:</strong> ${data.created_at} &nbsp;|&nbsp;
           <strong>카테고리:</strong> ${data.category ?? '없음'} &nbsp;|&nbsp;
           <strong>작성자:</strong> ${data.author_nickname ?? '익명'}
         </p>
+        <div style="margin:1rem 0; line-height:1.6;">${data.content}</div>
+        ${attachmentHTML}
       `;
 
       // 작성자 확인 후 버튼 표시
