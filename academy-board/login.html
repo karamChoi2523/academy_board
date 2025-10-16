@@ -178,34 +178,40 @@
 
     const form = document.getElementById("loginForm");
     form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  e.preventDefault();
 
-      const formData = {
-        email: document.getElementById("email").value.trim(),
-        password: document.getElementById("password").value.trim()
-      };
+  const formData = {
+    email: document.getElementById("email").value.trim(),
+    password: document.getElementById("password").value.trim()
+  };
 
-      try {
-        const res = await fetch("/api/auth/login.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include", // 🔧 세션 쿠키 포함
-          body: JSON.stringify(formData)
-        });
-
-        const result = await res.json();
-        alert(result.message);
-
-        if (result.success) {
-          // 🔧 sessionStorage 사용
-          sessionStorage.setItem("isLoggedIn", "true");
-          sessionStorage.setItem("user", JSON.stringify(result.data.user));
-          window.location.href = "index.html";
-        }
-      } catch (err) {
-        alert("서버 연결에 문제가 있습니다. 잠시 후 다시 시도해주세요.");
-      }
+  try {
+    const res = await fetch("/api/auth/login.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include", // 🔧 세션 쿠키 포함
+      body: JSON.stringify(formData)
     });
+
+    const result = await res.json();
+    alert(result.message);
+
+    if (result.success) {
+      // 🔧 sessionStorage 사용
+      sessionStorage.setItem("isLoggedIn", "true");
+      sessionStorage.setItem("user", JSON.stringify(result.data.user));
+
+      // 로그가 잘 출력되는지 확인
+      console.log("로그인 성공 후 sessionStorage 내용:");
+      console.log("isLoggedIn: ", sessionStorage.getItem('isLoggedIn'));
+      console.log("user: ", JSON.parse(sessionStorage.getItem('user'))); // user 정보를 JSON.parse로 출력
+
+      window.location.href = "index.html";
+    }
+  } catch (err) {
+    alert("서버 연결에 문제가 있습니다. 잠시 후 다시 시도해주세요.");
+  }
+});
   </script>
 </body>
 </html>
