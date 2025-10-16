@@ -130,7 +130,6 @@ document.getElementById("commentForm").addEventListener("submit", async (e) => {
     alert("댓글 작성 중 오류가 발생했습니다.");
   }
 });
-
 // 댓글 조회
 async function loadComments(postId) {
   const response = await fetch(`/api/comment/get_comments.php?post_id=${postId}`);
@@ -150,9 +149,38 @@ async function loadComments(postId) {
     commentElement.innerHTML = `
       <p><strong>${comment.author_nickname}</strong> (${comment.created_at}):</p>
       <p>${comment.content}</p>
+      ${comment.isAuthor ? `<button class="btn-delete-comment" onclick="deleteComment(${comment.id})">🗑️ 삭제</button>` : ''}
     `;
     commentsContainer.appendChild(commentElement);
   });
+}
+
+// 댓글 삭제 함수
+async function deleteComment(commentId) {
+  if (!confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
+    return;
+  }
+
+  try {
+    const response = await fetch(`/api/comment/delete.php`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: commentId }),
+    });
+
+    const data = await response.json();
+    if (data.success) {
+      alert('댓글이 삭제되었습니다.');
+      loadComments(postId);  // 댓글 목록 다시 불러오기
+    } else {
+      alert('댓글 삭제에 실패했습니다.');
+    }
+  } catch (error) {
+    console.error('댓글 삭제 오류:', error);
+    alert('댓글 삭제 중 오류가 발생했습니다.');
+  }
 }
 
 // 페이지 로드 시 댓글 불러오기
