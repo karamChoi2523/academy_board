@@ -27,25 +27,35 @@ async function loadPostDetails(postId, postContent, deleteBtn, editBtn) {
         <h2>${data.title}</h2>
         <p>${data.content}</p>
         <p><strong>작성일:</strong> ${data.created_at}</p>
-        <p><strong>카테고리:</strong> ${data.category}</p>
-        <p><strong>작성자:</strong> ${data.author_nickname}</p> <!-- 작성자 추가 -->
+        <p><strong>카테고리:</strong> ${data.category ?? '없음'}</p>
+        <p><strong>작성자:</strong> ${data.author_nickname ?? '익명'}</p>
       `;
 
-      // 로그인한 사용자의 user_id를 세션에서 가져옵니다.
-      const loggedInUserId = sessionStorage.getItem('user_id');  // 세션에 저장된 사용자 ID
-      console.log("Logged in user ID:", loggedInUserId); // 로그로 세션 값 확인
+      // ✅ 첨부파일 표시
+      const attachmentLinkContainer = document.getElementById("attachment-link");
+      if (data.attachment_path) {
+        const fileUrl = `/uploads/${data.attachment_path}`;
+        attachmentLinkContainer.innerHTML = `
+          <p><strong>첨부파일:</strong>
+            <a href="${fileUrl}" download="${data.attachment_name}">
+              ${data.attachment_name}
+            </a>
+          </p>
+        `;
+      } else {
+        attachmentLinkContainer.innerHTML = "";
+      }
 
-      if (data.user_id == loggedInUserId) { // 비교 시 == 사용하여 타입 일치시킴
-        // 작성자일 경우 수정/삭제 버튼 활성화
+      // ✅ 작성자 확인 후 버튼 표시
+      const loggedInUserId = sessionStorage.getItem('user_id');
+      if (data.user_id == loggedInUserId) {
         editBtn.style.display = "inline-block";
         deleteBtn.style.display = "inline-block";
 
-        // 수정 버튼 클릭 시
         editBtn.addEventListener('click', () => {
-          window.location.href = `update.html?id=${postId}`;  // 수정 페이지로 리다이렉트
+          window.location.href = `update.html?id=${postId}`;
         });
 
-        // 삭제 버튼 클릭 시
         deleteBtn.addEventListener('click', async () => {
           const confirmDelete = confirm("정말로 삭제하시겠습니까?");
           if (confirmDelete) {
@@ -61,6 +71,7 @@ async function loadPostDetails(postId, postContent, deleteBtn, editBtn) {
     postContent.innerHTML = "<p>게시물 상세 정보를 불러오는 데 오류가 발생했습니다.</p>";
   }
 }
+
 
 /**
  * 게시물 삭제 함수
