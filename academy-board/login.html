@@ -189,6 +189,7 @@
         const res = await fetch("/api/auth/login.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include", // 🔧 세션 쿠키 포함
           body: JSON.stringify(formData)
         });
 
@@ -196,7 +197,9 @@
         alert(result.message);
 
         if (result.success) {
-          localStorage.setItem("user", JSON.stringify(result.data.user));
+          // 🔧 localStorage 대신 sessionStorage 사용
+          sessionStorage.setItem("isLoggedIn", "true");
+          sessionStorage.setItem("user", JSON.stringify(result.data.user));
           window.location.href = "index.html";
         }
       } catch (err) {
