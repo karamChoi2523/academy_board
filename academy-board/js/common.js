@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const headerContainer = document.createElement("div");
   document.body.prepend(headerContainer);
 
-  // 🔥 변수 선언을 try 블록 밖으로!
   let loginLink, registerLink, logoutLink, menuToggle, nav;
 
   try {
@@ -18,20 +17,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     menuToggle = document.getElementById("menu-toggle");
     nav = document.getElementById("main-nav");
 
-    // 홈 버튼
-    window.goHome = () => (window.location.href = "index.html");
-
-    // 메뉴 토글
-    if (menuToggle && nav) {
-      menuToggle.addEventListener("click", () => {
-        nav.classList.toggle("open");
-      });
-    }
-
     // 3️⃣ 세션 확인
     const sessionRes = await fetch("/api/auth/check_session.php", {
       method: "GET",
-      credentials: "include",
+      credentials: "include",  // 세션 쿠키 포함
       cache: "no-store"
     });
     const result = await sessionRes.json();
@@ -51,12 +40,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     };
 
-    // 초기 UI 설정
+    // UI 설정
     updateUI(result.logged_in);
-
-    if (result.logged_in) {
-      console.log(`🔹 로그인됨: ${result.user.nickname} (${result.user.role})`);
-    }
 
     // 4️⃣ 로그인되지 않으면 로그인 페이지로 리다이렉트
     if (!result.logged_in && window.location.pathname !== '/login.html') {
