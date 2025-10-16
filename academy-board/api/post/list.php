@@ -1,16 +1,16 @@
+// list.php
 <?php
-// 데이터베이스 연결
 require_once '../../config/database.php';
 
-// 게시판 타입 (예: notice, qna, homework)
-$type = $_GET['type'] ?? 'notice'; 
+// board_type을 쿼리 파라미터로 받음
+$boardType = $_GET['type'] ?? 'notice'; // 기본값 'notice'
 
-$query = "SELECT * FROM posts WHERE board_type = :type ORDER BY created_at DESC";
-$stmt = $pdo->prepare($query);
-$stmt->bindParam(':type', $type);
-$stmt->execute();
+// 게시물 목록을 가져오는 SQL 쿼리
+$sql = "SELECT * FROM posts WHERE board_type = :board_type";
+$stmt = $pdo->prepare($sql);
+$stmt->execute(['board_type' => $boardType]);
 
-$posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+// 결과를 JSON 형식으로 반환
+$posts = $stmt->fetchAll();
 echo json_encode($posts);
 ?>
