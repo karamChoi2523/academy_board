@@ -331,76 +331,82 @@
     <footer>© 2025 Haneul Academy Board · All Rights Reserved.</footer>
 
     <script>
-      let boardType;
+  let boardType;
 
-      // 로그인 상태 확인
-      if (!sessionStorage.getItem("isLoggedIn")) {
-        alert("로그인 후에 이용해주세요.");
-        window.location.href = "login.html";
+  // 로그인 상태 확인
+  if (!sessionStorage.getItem("isLoggedIn")) {
+    alert("로그인 후에 이용해주세요.");
+    window.location.href = "login.html";
+  }
+
+  // URL에서 boardType 파라미터 받기
+  const params = new URLSearchParams(window.location.search);
+  boardType = params.get("type") || "notice";
+
+  // 뒤로가기 함수
+  function goBack() {
+    window.history.back();
+  }
+
+  // 글자 수 카운트
+  document.getElementById("content").addEventListener("input", (e) => {
+    const count = e.target.value.length;
+    const countDisplay = document.getElementById("charCount");
+    countDisplay.textContent = count;
+
+    if (count > 4500) {
+      countDisplay.parentElement.classList.add("warning");
+    } else {
+      countDisplay.parentElement.classList.remove("warning");
+    }
+  });
+
+  // 폼 제출 처리
+  document
+    .getElementById("postForm")
+    .addEventListener("submit", async (e) => {
+      e.preventDefault(); // 기본 폼 제출을 막습니다.
+
+      const title = document.getElementById("title").value;
+      const content = document.getElementById("content").value;
+      const category = document.getElementById("category").value || null;
+
+      // 제목, 내용, 카테고리가 비어있으면 alert 메시지를 띄우고 제출하지 않음
+      if (!title || !content || !category) {
+        alert("제목, 내용, 카테고리를 모두 입력해주세요.");
+        return; // 입력이 부족하면 아래 코드 실행을 멈춤
       }
 
-      // URL에서 boardType 파라미터 받기
-      const params = new URLSearchParams(window.location.search);
-      boardType = params.get("type") || "notice";
+      const postData = {
+        title,
+        content,
+        category,
+        board_type: boardType,
+        user_id: sessionStorage.getItem("user_id"),
+      };
 
-      // 뒤로가기 함수
-      function goBack() {
-        window.history.back();
-      }
-
-      // 글자 수 카운트
-      document.getElementById("content").addEventListener("input", (e) => {
-        const count = e.target.value.length;
-        const countDisplay = document.getElementById("charCount");
-        countDisplay.textContent = count;
-
-        if (count > 4500) {
-          countDisplay.parentElement.classList.add("warning");
-        } else {
-          countDisplay.parentElement.classList.remove("warning");
-        }
-      });
-
-      // 폼 제출 처리
-      document
-        .getElementById("postForm")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
-
-          const title = document.getElementById("title").value;
-          const content = document.getElementById("content").value;
-          const category = document.getElementById("category").value || null;
-
-          const postData = {
-            title,
-            content,
-            category,
-            board_type: boardType,
-            user_id: sessionStorage.getItem("user_id"),
-          };
-
-          try {
-            const response = await fetch("/api/post/create.php", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(postData),
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-              alert("게시물이 작성되었습니다.");
-              window.location.href = `board.html?type=${boardType}`;
-            } else {
-              alert("게시물 작성에 실패했습니다.");
-            }
-          } catch (error) {
-            console.error("게시물 작성 오류:", error);
-            alert("게시물 작성 중 오류가 발생했습니다.");
-          }
+      try {
+        const response = await fetch("/api/post/create.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(postData),
         });
-    </script>
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert("게시물이 작성되었습니다.");
+          window.location.href = `board.html?type=${boardType}`;
+        } else {
+          alert("게시물 작성에 실패했습니다.");
+        }
+      } catch (error) {
+        console.error("게시물 작성 오류:", error);
+        alert("게시물 작성 중 오류가 발생했습니다.");
+      }
+    });
+</script>
   </body>
 </html>
