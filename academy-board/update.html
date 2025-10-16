@@ -305,9 +305,11 @@
         <div class="form-group">
           <label for="category">카테고리</label>
           <select id="category" name="category">
-            <option value="">선택 안 함</option>
-            <option value="제출">제출</option>
-            <option value="과제">과제</option>
+              <option value="">선택 안 함</option>
+              <option value="공지">공지</option>
+              <option value="질문">질문</option>
+              <option value="제출">제출</option>
+              <option value="과제">과제</option>
           </select>
         </div>
       </div>
@@ -426,41 +428,41 @@
 
     // 폼 제출 처리
     document.getElementById('postForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
+  e.preventDefault();
 
-      const title = document.getElementById('title').value;
-      const content = document.getElementById('content').value;
-      const category = document.getElementById('category').value || null;
+  const title = document.getElementById('title').value;
+  const content = document.getElementById('content').value;
+  const category = document.getElementById('category').value || null;
 
-      const postData = {
-        title,
-        content,
-        category,
-        id: postId,
-      };
+  const postData = {
+    title,
+    content,
+    category,
+    id: postId,
+  };
 
-      try {
-        const response = await fetch('/api/post/update.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(postData),
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-          alert('게시물이 수정되었습니다.');
-          window.location.href = `board-detail.html?id=${postId}`;
-        } else {
-          alert('게시물 수정에 실패했습니다.');
-        }
-      } catch (error) {
-        console.error('게시물 수정 오류:', error);
-        alert('게시물 수정 중 오류가 발생했습니다.');
-      }
+  try {
+    const response = await fetch('/api/post/update.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',  // JSON 형식으로 요청
+      },
+      body: JSON.stringify(postData),  // JSON 형식으로 데이터 전송
     });
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert('게시물이 수정되었습니다.');
+      window.location.href = `board-detail.html?id=${postId}`;
+    } else {
+      alert('게시물 수정에 실패했습니다.');
+    }
+  } catch (error) {
+    console.error('게시물 수정 오류:', error);
+    alert('게시물 수정 중 오류가 발생했습니다.');
+  }
+});
   </script>
 </body>
 </html>

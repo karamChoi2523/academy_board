@@ -2,9 +2,12 @@
 // 데이터베이스 연결
 require_once '../../config/database.php';
 
-$postId = $_POST['id'] ?? null;
-$title = $_POST['title'] ?? '';
-$content = $_POST['content'] ?? '';
+// POST 데이터 가져오기 (JSON 형식으로 받음)
+$data = json_decode(file_get_contents("php://input"), true);
+
+$postId = $data['id'] ?? null;
+$title = $data['title'] ?? '';
+$content = $data['content'] ?? '';
 
 if (!$postId || empty($title) || empty($content)) {
     echo json_encode(['success' => false, 'message' => '필수 항목을 입력해주세요.']);
