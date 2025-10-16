@@ -49,10 +49,13 @@ async function loadBoardList(boardType, boardContent) {
         const date = new Date(post.created_at);
         const formattedDate = formatDate(date);
         
+        const categoryDisplay = post.category ? `<span class="post-category">${escapeHtml(post.category)}</span>` : '';
+        
         listItem.innerHTML = `
           <div class="post-content">
             <div class="post-title">${escapeHtml(post.title)}</div>
             <div class="post-meta">
+              ${categoryDisplay}
               <span class="post-meta-item author">👤 ${escapeHtml(post.nickname || '익명')}</span>
               <span class="post-meta-item date">📅 ${formattedDate}</span>
             </div>
@@ -80,6 +83,11 @@ async function loadBoardList(boardType, boardContent) {
     boardContent.innerHTML = '<div class="empty-message">게시물을 불러오는 데 오류가 발생했습니다.</div>';
   }
 }
+
+/**
+ * 날짜 포맷팅 함수
+ * 오늘이면 시간, 어제면 "어제", 그 외에는 날짜 표시
+ */
 function formatDate(date) {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -102,6 +110,7 @@ function formatDate(date) {
     return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric' });
   }
 }
+
 /**
  * XSS 방지를 위한 HTML 이스케이프 함수
  */

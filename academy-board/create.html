@@ -5,125 +5,359 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>게시물 작성</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <style>
-      /* 기본 스타일 */
-      body {
-        font-family: "Noto Sans KR", sans-serif;
-        background: #f9f9f9;
+      * {
         margin: 0;
         padding: 0;
+        box-sizing: border-box;
       }
+
+      body {
+        font-family: "Noto Sans KR", sans-serif;
+        background: #f8f9fa;
+        min-height: 100vh;
+        color: #333;
+      }
+
       header {
-        background: #4c9aff;
-        color: white;
-        padding: 1rem 2rem;
+        background: white;
+        color: #333;
+        padding: 1.5rem 2rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        border-bottom: 3px solid #4c9aff;
       }
+
       header h1 {
-        font-size: 1.6rem;
+        font-size: 1.8rem;
         font-weight: 700;
+        color: #4c9aff;
       }
+
+      nav a {
+        color: #333;
+        text-decoration: none;
+        margin-left: 2rem;
+        font-weight: 500;
+        transition: 0.3s;
+        font-size: 0.95rem;
+      }
+
+      nav a:hover {
+        color: #4c9aff;
+      }
+
       main {
         flex: 1;
         display: flex;
         justify-content: center;
         flex-direction: column;
-        padding: 4rem 1rem;
-        text-align: center;
+        align-items: center;
+        padding: 3rem 1rem;
       }
+
       main h2 {
         font-size: 2rem;
         color: #333;
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
+        font-weight: 700;
       }
+
       form {
         background: white;
-        padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 2.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
         width: 100%;
-        max-width: 600px;
+        max-width: 700px;
+        border: 1px solid #e5e7eb;
       }
-      input,
+
+      .form-group {
+        margin-bottom: 2rem;
+      }
+
+      .form-group:last-of-type {
+        margin-bottom: 0;
+      }
+
+      label {
+        display: block;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.6rem;
+      }
+
+      input[type="text"],
+      input[type="select"],
+      textarea,
+      select {
+        width: 100%;
+        padding: 0.9rem 1rem;
+        font-size: 0.95rem;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 8px;
+        font-family: "Noto Sans KR", sans-serif;
+        transition: all 0.3s ease;
+        background: #fafbfc;
+      }
+
+      input[type="text"]:focus,
+      input[type="select"]:focus,
+      textarea:focus,
+      select:focus {
+        outline: none;
+        border-color: #4c9aff;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(76, 154, 255, 0.1);
+      }
+
       textarea {
-        width: 100%;
-        padding: 1rem;
-        margin-bottom: 1rem;
-        font-size: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        box-sizing: border-box;
+        resize: vertical;
+        min-height: 250px;
+        line-height: 1.6;
       }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+      }
+
+      .form-row .form-group {
+        margin-bottom: 0;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2.5rem;
+      }
+
       button {
-        width: 100%;
+        flex: 1;
         padding: 1rem;
-        background: #4c9aff;
-        color: white;
-        font-size: 1.2rem;
+        font-size: 1rem;
+        font-weight: 600;
         border: none;
         border-radius: 8px;
         cursor: pointer;
-        transition: 0.3s;
+        transition: all 0.3s ease;
       }
-      button:hover {
-        background: #3d8bef;
+
+      .btn-submit {
+        background: #4c9aff;
+        color: white;
       }
+
+      .btn-submit:hover {
+        background: #3a7fd4;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(76, 154, 255, 0.3);
+      }
+
+      .btn-submit:active {
+        transform: translateY(0);
+      }
+
+      .btn-cancel {
+        background: #f3f4f6;
+        color: #666;
+        border: 1.5px solid #e5e7eb;
+      }
+
+      .btn-cancel:hover {
+        background: #e5e7eb;
+        transform: translateY(-2px);
+      }
+
       footer {
-        background: #f2f7ff;
+        background: white;
         text-align: center;
-        padding: 1rem 0;
-        color: #777;
+        padding: 2rem;
+        color: #666;
         font-size: 0.9rem;
-        border-top: 1px solid #e2e8f0;
+        border-top: 1px solid #e5e7eb;
+        margin-top: 3rem;
+      }
+
+      .character-count {
+        font-size: 0.8rem;
+        color: #999;
+        margin-top: 0.4rem;
+        text-align: right;
+      }
+
+      .character-count.warning {
+        color: #ff6b6b;
+      }
+
+      /* 반응형 */
+      @media (max-width: 768px) {
+        header {
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+        }
+
+        header h1 {
+          font-size: 1.5rem;
+        }
+
+        nav {
+          display: flex;
+          gap: 1rem;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        nav a {
+          margin-left: 0;
+          font-size: 0.85rem;
+        }
+
+        main {
+          padding: 2rem 1rem;
+        }
+
+        main h2 {
+          font-size: 1.6rem;
+          margin-bottom: 1.5rem;
+        }
+
+        form {
+          padding: 2rem;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+
+        .button-group {
+          flex-direction: column;
+        }
+      }
+
+      @media (max-width: 480px) {
+        main h2 {
+          font-size: 1.4rem;
+        }
+
+        form {
+          padding: 1.5rem;
+        }
+
+        label {
+          font-size: 0.9rem;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+          padding: 0.8rem 0.9rem;
+          font-size: 0.9rem;
+        }
+
+        textarea {
+          min-height: 180px;
+        }
+
+        button {
+          padding: 0.85rem;
+          font-size: 0.95rem;
+        }
       }
     </style>
   </head>
   <body>
     <script src="./js/common.js" defer></script>
-    <!-- 헤더 로딩 및 메뉴 토글 처리 -->
 
     <main>
-      <h2>새 게시물 작성</h2>
+      <h2>✏️ 새 게시물 작성</h2>
       <form id="postForm">
-        <input
-          type="text"
-          id="title"
-          name="title"
-          placeholder="제목을 입력하세요"
-          required
-        />
-        <textarea
-          id="content"
-          name="content"
-          rows="6"
-          placeholder="내용을 입력하세요"
-          required
-        ></textarea>
-        <button type="submit">게시물 작성</button>
+        <div class="form-group">
+          <label for="title">제목 *</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            placeholder="게시물의 제목을 입력하세요"
+            required
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="category">카테고리</label>
+            <select id="category" name="category">
+              <option value="">선택 안 함</option>
+              <option value="제출">제출</option>
+              <option value="과제">과제</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="content">내용 *</label>
+          <textarea
+            id="content"
+            name="content"
+            placeholder="게시물의 내용을 입력하세요"
+            required
+          ></textarea>
+          <div class="character-count">
+            <span id="charCount">0</span> / 5000자
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button type="submit" class="btn-submit">📤 게시물 작성</button>
+          <button type="button" class="btn-cancel" onclick="goBack()">
+            취소
+          </button>
+        </div>
       </form>
     </main>
 
     <footer>© 2025 Haneul Academy Board · All Rights Reserved.</footer>
 
     <script>
+      let boardType;
+
       // 로그인 상태 확인
       if (!sessionStorage.getItem("isLoggedIn")) {
         alert("로그인 후에 이용해주세요.");
-        window.location.href = "login.html"; // 로그인 페이지로 이동
+        window.location.href = "login.html";
       }
 
-      // `create.html`에서 `boardType` 파라미터 받기
+      // URL에서 boardType 파라미터 받기
       const params = new URLSearchParams(window.location.search);
-      const boardType = params.get("type"); // 'notice', 'question', 'assignment' 중 하나가 나옵니다.
+      boardType = params.get("type") || "notice";
 
-      // 게시물 작성 폼에 boardType을 포함시켜 서버로 전달
-      console.log(boardType); // 확인용
+      // 뒤로가기 함수
+      function goBack() {
+        window.history.back();
+      }
+
+      // 글자 수 카운트
+      document.getElementById("content").addEventListener("input", (e) => {
+        const count = e.target.value.length;
+        const countDisplay = document.getElementById("charCount");
+        countDisplay.textContent = count;
+
+        if (count > 4500) {
+          countDisplay.parentElement.classList.add("warning");
+        } else {
+          countDisplay.parentElement.classList.remove("warning");
+        }
+      });
 
       // 폼 제출 처리
       document
@@ -133,12 +367,14 @@
 
           const title = document.getElementById("title").value;
           const content = document.getElementById("content").value;
+          const category = document.getElementById("category").value || null;
 
           const postData = {
             title,
             content,
+            category,
             board_type: boardType,
-            user_id: sessionStorage.getItem("user_id"), // 로그인된 사용자 ID
+            user_id: sessionStorage.getItem("user_id"),
           };
 
           try {
@@ -154,8 +390,7 @@
 
             if (result.success) {
               alert("게시물이 작성되었습니다.");
-              // 게시글 작성 후 해당 boardType에 맞는 board.html로 리다이렉트
-              window.location.href = `board.html?type=${boardType}`; // boardType을 URL에 추가
+              window.location.href = `board.html?type=${boardType}`;
             } else {
               alert("게시물 작성에 실패했습니다.");
             }
