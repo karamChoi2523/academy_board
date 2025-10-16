@@ -135,10 +135,10 @@
 </head>
 <body>
   <!-- 헤더와 공통 UI 처리 스크립트 -->
-  <script src="./js/common.js" defer></script>   <!-- 헤더 로딩 및 메뉴 토글 처리 -->
+  <script src="./js/common.js" defer></script>
 
   <main>
-    <h2 id="board-title"></h2> <!-- 게시판 제목을 여기에 동적으로 표시 -->
+    <h2 id="board-title"></h2>
 
     <!-- 비로그인 상태에서 보이는 화면 -->
     <div id="guest-view">
@@ -154,20 +154,7 @@
     <!-- 로그인 후 보이는 화면 -->
     <div id="user-view" style="display:none;">
       <h2>게시판 목록 📚</h2>
-      <div class="card-container">
-        <div class="card" onclick="goTo('board.html?type=notice')">
-          <h3>공지사항</h3>
-          <p>학원 내 주요 공지사항을 확인하세요.</p>
-        </div>
-        <div class="card" onclick="goTo('board.html?type=qna')">
-          <h3>질문 게시판</h3>
-          <p>궁금한 점을 자유롭게 질문하세요.</p>
-        </div>
-        <div class="card" onclick="goTo('board.html?type=homework')">
-          <h3>과제 게시판</h3>
-          <p>과제 제출 및 피드백을 확인하세요.</p>
-        </div>
-      </div>
+      <div id="board-content"></div>
     </div>
   </main>
 
@@ -192,12 +179,6 @@
       boardTitle.innerText = "질문 게시판";
     } else if (boardType === "homework") {
       boardTitle.innerText = "과제 게시판";
-    }
-
-    // 로그인 상태 확인 및 리다이렉트
-    if (!sessionStorage.getItem('isLoggedIn')) {
-      alert("로그인 후에 이용해주세요.");
-      window.location.href = "login.html";  // 로그인 페이지로 이동
     }
   </script>
 </body>
