@@ -75,7 +75,7 @@ async function loadPostDetails(postId, postContent, deleteBtn, editBtn) {
         deleteBtn.addEventListener('click', async () => {
           const confirmDelete = confirm("정말로 삭제하시겠습니까?");
           if (confirmDelete) {
-            await deletePost(postId, data.boardType);
+            await deletePost(postId, data.board_type);
           }
         });
       }
