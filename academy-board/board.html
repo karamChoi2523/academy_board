@@ -163,8 +163,6 @@
     function goTo(page) {
       window.location.href = page;
     }
-
-    // 로그인 상태 확인 (common.js에서 처리)
     if (!sessionStorage.getItem('isLoggedIn')) {
       alert("로그인 후에 이용해주세요.");
       window.location.href = "login.html";  // 로그인 페이지로 이동
