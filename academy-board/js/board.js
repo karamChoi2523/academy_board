@@ -57,3 +57,39 @@ async function loadBoardList(boardType, boardContent) {
     boardContent.innerHTML = "<p>게시물 목록을 불러오는 데 오류가 발생했습니다.</p>";
   }
 }
+function formatDate(date) {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  
+  const postDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  
+  if (postDate.getTime() === today.getTime()) {
+    // 오늘: 시간:분 형식
+    return date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false });
+  } else if (postDate.getTime() === yesterday.getTime()) {
+    // 어제
+    return '어제';
+  } else if (now.getFullYear() === date.getFullYear()) {
+    // 올해: 월-일 형식
+    return date.toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' });
+  } else {
+    // 작년 이전: 년-월-일 형식
+    return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric' });
+  }
+}
+/**
+ * XSS 방지를 위한 HTML 이스케이프 함수
+ */
+function escapeHtml(text) {
+  if (!text) return '';
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return text.replace(/[&<>"']/g, m => map[m]);
+}
