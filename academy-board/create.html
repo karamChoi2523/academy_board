@@ -367,7 +367,8 @@
   });
 
   // 폼 제출 처리
-  document.getElementById("postForm").addEventListener("submit", async (e) => {
+  // 폼 제출 처리
+document.getElementById("postForm").addEventListener("submit", async (e) => {
   e.preventDefault(); // 기본 폼 제출을 막습니다.
 
   const title = document.getElementById("title").value;
@@ -390,6 +391,9 @@
   formData.append("user_id", sessionStorage.getItem("user_id"));
   formData.append("board_type", boardType);
 
+  // 디버깅: 전송되는 데이터 확인
+  console.log("Sending form data:", formData);
+
   try {
     const response = await fetch("/api/post/create.php", {
       method: "POST",
@@ -397,6 +401,7 @@
     });
 
     const result = await response.json();
+    console.log("Server response:", result);  // 서버 응답 로그 추가
 
     if (result.success) {
       alert("게시물이 작성되었습니다.");
