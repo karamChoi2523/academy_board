@@ -92,21 +92,22 @@ async function loadPostDetails(postId, postContent, deleteBtn, editBtn) {
  * 게시물 삭제 함수
  * @param {string} postId - 게시물 ID
  */
-async function deletePost(postId) {
+async function deletePost(postId, boardType) {
   try {
     const response = await fetch('/api/post/delete.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id: postId }),  // JSON 형식으로 ID 전달
+      body: JSON.stringify({ id: postId }),
     });
 
     const data = await response.json();
 
     if (data.success) {
       alert('게시물이 삭제되었습니다.');
-      window.location.href = 'board.html'; // 게시판 목록 페이지로 리다이렉트
+      // ✅ 게시판 타입에 따라 이동 경로 결정
+      window.location.href = `board.html?type=${boardType}`;
     } else {
       alert('게시물 삭제에 실패했습니다.');
     }
