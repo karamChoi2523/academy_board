@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>아카데미 게시판</title>
+  <title>게시판</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
   <style>
     /* 기본 스타일 */
@@ -135,9 +135,11 @@
 </head>
 <body>
   <!-- 헤더와 공통 UI 처리 스크립트 -->
-  <script src="./js/common.js" defer></script>   <!-- 헤더 로딩 및 메뉴 토글 처리 -->
+  <script src="./js/common.js" defer></script>
 
   <main>
+    <h2 id="board-title"></h2>
+
     <!-- 비로그인 상태에서 보이는 화면 -->
     <div id="guest-view">
       <h2>환영합니다 🌟</h2>
@@ -152,20 +154,7 @@
     <!-- 로그인 후 보이는 화면 -->
     <div id="user-view" style="display:none;">
       <h2>게시판 목록 📚</h2>
-      <div class="card-container">
-        <div class="card" onclick="goTo('board.html?type=notice')">
-          <h3>공지사항</h3>
-          <p>학원 내 주요 공지사항을 확인하세요.</p>
-        </div>
-        <div class="card" onclick="goTo('board.html?type=qna')">
-          <h3>질문 게시판</h3>
-          <p>궁금한 점을 자유롭게 질문하세요.</p>
-        </div>
-        <div class="card" onclick="goTo('board.html?type=homework')">
-          <h3>과제 게시판</h3>
-          <p>과제 제출 및 피드백을 확인하세요.</p>
-        </div>
-      </div>
+      <div id="board-content"></div>
     </div>
   </main>
 
@@ -176,6 +165,20 @@
   <script>
     function goTo(page) {
       window.location.href = page;
+    }
+
+    // URL에서 'type' 파라미터 가져오기
+    const params = new URLSearchParams(window.location.search);
+    const boardType = params.get("type");
+
+    // 각 게시판의 이름을 동적으로 설정
+    const boardTitle = document.getElementById("board-title");
+    if (boardType === "notice") {
+      boardTitle.innerText = "공지사항 게시판";
+    } else if (boardType === "question") {
+      boardTitle.innerText = "질문 게시판";
+    } else if (boardType === "assignment") {
+      boardTitle.innerText = "과제 게시판";
     }
   </script>
 </body>
