@@ -1,6 +1,12 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const headerContainer = document.createElement("div");
-  document.body.prepend(headerContainer);
+  if (document.body) {
+    document.body.prepend(headerContainer);
+  } else {
+    window.addEventListener("load", () => {
+      document.body.prepend(headerContainer);
+    });
+  }
 
   let loginLink, registerLink, logoutLink, menuToggle, nav;
 
