@@ -400,8 +400,11 @@ document.getElementById("postForm").addEventListener("submit", async (e) => {
       body: formData, // FormData를 직접 전송
     });
 
-    const result = await response.json();
-    console.log("Server response:", result);  // 서버 응답 로그 추가
+    //const result = await response.json();
+    //console.log("Server response:", result);  // 서버 응답 로그 추가
+    const text = await response.text();
+console.log("Raw server response:", text);
+const result = JSON.parse(text);
 
     if (result.success) {
       alert("게시물이 작성되었습니다.");
