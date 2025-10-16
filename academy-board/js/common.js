@@ -21,7 +21,7 @@ if (!document.querySelector('link[href*="Noto+Sans+KR"]')) {
     const html = await res.text();
     headerContainer.innerHTML = html;
 
-    // 3️⃣ 요소 참조
+    // 3️⃣ 요소 참조 (헤더 로드 후에 참조!)
     const loginLink = document.getElementById("login-link");
     const registerLink = document.getElementById("register-link");
     const logoutLink = document.getElementById("logout-link");
@@ -94,11 +94,13 @@ if (!document.querySelector('link[href*="Noto+Sans+KR"]')) {
       });
     }
 
-    // 8️⃣ 햄버거 메뉴 토글 기능
+    // 8️⃣ 햄버거 메뉴 토글 기능 (요소 존재 확인 후 등록)
     if (menuToggle && nav) {
       menuToggle.addEventListener("click", () => {
         nav.classList.toggle("open");
       });
+    } else {
+      console.warn("menuToggle 또는 nav 요소를 찾을 수 없습니다.");
     }
 
     // 9️⃣ 페이지 이동 함수
