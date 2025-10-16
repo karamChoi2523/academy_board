@@ -6,11 +6,7 @@
   <title>회원 정보 수정</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Noto Sans KR', sans-serif;
@@ -39,8 +35,36 @@
       text-align: center;
     }
 
-    .form-group {
-      margin-bottom: 1.5rem;
+    .profile-upload {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 1.5rem auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
+      padding-top: 3px;
+    }
+
+    .profile-upload img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #d0d7e2;
+      background: #f0f4ff;
+      cursor: pointer;
+      transition: 0.2s;
+      aspect-ratio: 1 / 1;
+    }
+
+    .profile-upload img:hover {
+      border-color: #4c9aff;
+    }
+
+    .profile-upload input[type="file"] {
+      display: none;
     }
 
     label {
@@ -57,7 +81,6 @@
       border: 1px solid #e5e7eb;
       border-radius: 6px;
       font-size: 0.95rem;
-      font-family: 'Noto Sans KR', sans-serif;
       transition: border-color 0.3s ease;
     }
 
@@ -67,17 +90,13 @@
       box-shadow: 0 0 0 3px rgba(76, 154, 255, 0.1);
     }
 
-    .error {
-      color: #ff4c4c;
-      font-size: 0.85rem;
-      margin-top: 0.3rem;
+    input[readonly] {
+      background-color: #f3f4f6;
+      cursor: not-allowed;
     }
 
-    .success {
-      color: #22c55e;
-      font-size: 0.85rem;
-      margin-top: 0.3rem;
-    }
+    .form-group { margin-bottom: 1.5rem; }
+    .error { color: #ff4c4c; font-size: 0.85rem; margin-top: 0.3rem; }
 
     .btn-group {
       display: flex;
@@ -98,221 +117,66 @@
       transition: all 0.3s ease;
     }
 
-    .btn-submit {
-      background: #4c9aff;
-      color: white;
-    }
+    .btn-submit { background: #4c9aff; color: white; }
+    .btn-submit:hover { background: #3a7fd4; transform: translateY(-2px); }
+    .btn-cancel { background: #e5e7eb; color: #333; }
+    .btn-cancel:hover { background: #d1d5db; transform: translateY(-2px); }
 
-    .btn-submit:hover {
-      background: #3a7fd4;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(76, 154, 255, 0.3);
-    }
-
-    .btn-submit:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .btn-cancel {
-      background: #e5e7eb;
-      color: #333;
-    }
-
-    .btn-cancel:hover {
-      background: #d1d5db;
-      transform: translateY(-2px);
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-
-    .modal {
-      background: white;
-      border-radius: 12px;
-      padding: 2rem;
-      max-width: 400px;
-      width: 90%;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-    }
-
-    .modal h3 {
-      font-size: 1.3rem;
-      margin-bottom: 1.5rem;
-      color: #333;
-    }
-
-    .modal-form-group {
-      margin-bottom: 1.5rem;
-    }
-
-    .modal-form-group label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: #555;
-      font-size: 0.95rem;
-    }
-
-    .modal-form-group input {
-      width: 100%;
-      padding: 0.8rem;
-      border: 1px solid #e5e7eb;
-      border-radius: 6px;
-      font-size: 0.95rem;
-      font-family: 'Noto Sans KR', sans-serif;
-    }
-
-    .modal-form-group input:focus {
-      outline: none;
-      border-color: #4c9aff;
-      box-shadow: 0 0 0 3px rgba(76, 154, 255, 0.1);
-    }
-
-    .modal-error {
-      color: #ff4c4c;
-      font-size: 0.85rem;
-      margin-top: 0.3rem;
-    }
-
-    .modal-btn-group {
-      display: flex;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-
-    .modal-btn {
-      flex: 1;
-      padding: 0.8rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      border-radius: 6px;
-      cursor: pointer;
-      border: none;
-      transition: all 0.3s ease;
-    }
-
-    .modal-btn-verify {
-      background: #4c9aff;
-      color: white;
-    }
-
-    .modal-btn-verify:hover {
-      background: #3a7fd4;
-    }
-
-    .modal-btn-cancel {
-      background: #e5e7eb;
-      color: #333;
-    }
-
-    .modal-btn-cancel:hover {
-      background: #d1d5db;
-    }
-
-    footer {
-      background: white;
-      text-align: center;
-      padding: 2rem;
-      color: #666;
-      font-size: 0.9rem;
-      border-top: 1px solid #e5e7eb;
-      margin-top: 3rem;
-    }
-
-    @media (max-width: 600px) {
-      main {
-        margin: 2rem auto;
-      }
-
-      .container {
-        padding: 1.5rem;
-      }
-
-      .container h2 {
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
-      }
-
-      .btn-group {
-        flex-direction: column;
-      }
-
-      .btn {
-        width: 100%;
-      }
-    }
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+    .modal { background: white; border-radius: 12px; padding: 2rem; max-width: 400px; width: 90%; }
+    .modal h3 { font-size: 1.3rem; margin-bottom: 1.5rem; color: #333; }
   </style>
 </head>
 <body>
-  <div id="header-container"></div>
-
   <main>
-    <!-- 비밀번호 확인 모달 -->
     <div id="passwordModal" class="modal-overlay">
       <div class="modal">
         <h3>비밀번호 확인</h3>
-        <p style="color: #666; margin-bottom: 1.5rem; font-size: 0.95rem;">회원 정보를 수정하기 위해 비밀번호를 입력해주세요.</p>
         <form id="passwordForm">
-          <div class="modal-form-group">
-            <label for="password">비밀번호</label>
-            <input type="password" id="password" required placeholder="비밀번호 입력">
-            <div id="passwordError" class="modal-error"></div>
-          </div>
-          <div class="modal-btn-group">
-            <button type="submit" class="modal-btn modal-btn-verify">확인</button>
-            <button type="button" class="modal-btn modal-btn-cancel" onclick="goBack()">취소</button>
+          <label for="password">비밀번호</label>
+          <input type="password" id="password" required placeholder="비밀번호 입력">
+          <div id="passwordError" style="color:red; margin-top:8px;"></div>
+          <div style="margin-top:1rem; text-align:right;">
+            <button type="submit" style="background:#4c9aff;color:white;padding:8px 14px;border:none;border-radius:6px;">확인</button>
           </div>
         </form>
       </div>
     </div>
 
-    <!-- 회원 정보 수정 폼 -->
     <div id="editForm" class="container hidden">
       <h2>회원 정보 수정</h2>
-      <form id="editProfileForm">
+
+      <div class="profile-upload">
+        <label for="profile_image">
+          <img id="profilePreview" src="./img/defaultUserImg.png" alt="프로필 이미지">
+        </label>
+        <input type="file" id="profile_image" name="profile_image" accept="image/*">
+      </div>
+
+      <form id="editProfileForm" enctype="multipart/form-data">
         <div class="form-group">
           <label for="email">이메일</label>
-          <input type="email" id="email" disabled style="background-color: #f3f4f6; cursor: not-allowed;">
+          <input type="email" id="email" readonly>
         </div>
 
         <div class="form-group">
           <label for="nickname">닉네임</label>
-          <input type="text" id="nickname" required placeholder="닉네임 입력">
-          <div id="nicknameError" class="error"></div>
+          <input type="text" id="nickname" required>
         </div>
 
         <div class="form-group">
-          <label for="name">이름</label>
-          <input type="text" id="name" required placeholder="이름 입력">
-          <div id="nameError" class="error"></div>
+          <label for="role">역할</label>
+          <input type="text" id="role" readonly>
         </div>
 
         <div class="form-group">
-          <label for="newPassword">새 비밀번호 (선택사항)</label>
-          <input type="password" id="newPassword" placeholder="변경하지 않으려면 비워두세요">
-          <div id="newPasswordError" class="error"></div>
+          <label for="newPassword">새 비밀번호 (선택)</label>
+          <input type="password" id="newPassword">
         </div>
 
         <div class="form-group">
-          <label for="confirmPassword">새 비밀번호 확인</label>
-          <input type="password" id="confirmPassword" placeholder="새 비밀번호 확인">
-          <div id="confirmPasswordError" class="error"></div>
+          <label for="confirmPassword">비밀번호 확인</label>
+          <input type="password" id="confirmPassword">
         </div>
 
         <div class="btn-group">
@@ -323,156 +187,83 @@
     </div>
   </main>
 
-  <footer>
-    © 2025 Haneul Academy Board · All Rights Reserved.
-  </footer>
-
-  <script src="./js/common.js" defer></script>
   <script>
-    function goTo(page) {
-      window.location.href = page;
-    }
+    function goBack(){ window.location.href='profile.html'; }
 
-    function goBack() {
-      window.location.href = 'profile.html';
-    }
-
-    // 로그인 상태 확인
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!sessionStorage.getItem('isLoggedIn')) {
-        alert("로그인 후 이용해주세요.");
-        window.location.href = "login.html";
-        return;
+    document.addEventListener('DOMContentLoaded',()=>{
+      if(!sessionStorage.getItem('isLoggedIn')){
+        alert("로그인 후 이용해주세요."); window.location.href="login.html"; return;
       }
-
       setupPasswordForm();
+      setupImagePreview();
     });
 
-    // 비밀번호 확인 폼 설정
-    function setupPasswordForm() {
-      const form = document.getElementById('passwordForm');
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const password = document.getElementById('password').value;
-        const errorDiv = document.getElementById('passwordError');
-
-        try {
-          const response = await fetch('/api/auth/verify_password.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ password }),
-            credentials: 'include'
-          });
-
-          const data = await response.json();
-
-          if (data.success) {
-            // 비밀번호 확인 완료 - 수정 폼 표시
-            document.getElementById('passwordModal').classList.add('hidden');
-            document.getElementById('editForm').classList.remove('hidden');
-            loadCurrentUserInfo();
-          } else {
-            errorDiv.textContent = data.message || '비밀번호가 일치하지 않습니다.';
-          }
-        } catch (error) {
-          console.error('비밀번호 확인 오류:', error);
-          errorDiv.textContent = '오류가 발생했습니다.';
+    function setupImagePreview(){
+      const input=document.getElementById('profile_image');
+      const preview=document.getElementById('profilePreview');
+      input.addEventListener('change',e=>{
+        const file=e.target.files[0];
+        if(file){
+          const reader=new FileReader();
+          reader.onload=()=>{ preview.src=reader.result; };
+          reader.readAsDataURL(file);
         }
       });
     }
 
-    // 현재 사용자 정보 로드
-    async function loadCurrentUserInfo() {
-      try {
-        const response = await fetch('/api/auth/get_profile.php', {
-          credentials: 'include',
-          cache: 'no-store'
+    async function setupPasswordForm(){
+      const form=document.getElementById('passwordForm');
+      form.addEventListener('submit',async(e)=>{
+        e.preventDefault();
+        const password=document.getElementById('password').value;
+        const res=await fetch('/api/auth/verify-password.php',{
+          method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({password}),credentials:'include'
         });
-
-        const data = await response.json();
-
-        if (data.success && data.user) {
-          document.getElementById('email').value = data.user.email;
-          document.getElementById('nickname').value = data.user.nickname;
-          document.getElementById('name').value = data.user.name;
+        const data=await res.json();
+        if(data.success){
+          document.getElementById('passwordModal').remove();
+          document.getElementById('editForm').classList.remove('hidden');
+          loadCurrentUserInfo();
+        }else{
+          document.getElementById('passwordError').textContent='비밀번호가 올바르지 않습니다.';
         }
-      } catch (error) {
-        console.error('사용자 정보 로드 오류:', error);
+      });
+    }
+
+    async function loadCurrentUserInfo(){
+      const res=await fetch('/api/user/get_user.php',{credentials:'include'});
+      const data=await res.json();
+      if(data.success&&data.user){
+        document.getElementById('email').value=data.user.email;
+        document.getElementById('nickname').value=data.user.nickname;
+        document.getElementById('role').value=data.user.role==='student'?'학생':'선생님';
+        document.getElementById('profilePreview').src=`/uploads/${data.user.profile_image}`;
       }
     }
 
-    // 회원 정보 수정 폼 제출
-    document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+    document.getElementById('editProfileForm').addEventListener('submit',async(e)=>{
       e.preventDefault();
+      const nickname=document.getElementById('nickname').value.trim();
+      const newPassword=document.getElementById('newPassword').value;
+      const confirmPassword=document.getElementById('confirmPassword').value;
+      const file=document.getElementById('profile_image').files[0];
 
-      // 유효성 검사
-      const nickname = document.getElementById('nickname').value.trim();
-      const name = document.getElementById('name').value.trim();
-      const newPassword = document.getElementById('newPassword').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
+      if(!nickname){alert('닉네임을 입력해주세요.');return;}
+      if(newPassword && newPassword!==confirmPassword){alert('비밀번호가 일치하지 않습니다.');return;}
 
-      // 오류 메시지 초기화
-      document.getElementById('nicknameError').textContent = '';
-      document.getElementById('nameError').textContent = '';
-      document.getElementById('newPasswordError').textContent = '';
-      document.getElementById('confirmPasswordError').textContent = '';
+      const formData=new FormData();
+      formData.append('nickname',nickname);
+      if(newPassword) formData.append('password',newPassword);
+      if(file) formData.append('profile_image',file);
 
-      let hasError = false;
-
-      if (!nickname) {
-        document.getElementById('nicknameError').textContent = '닉네임을 입력해주세요.';
-        hasError = true;
-      }
-
-      if (!name) {
-        document.getElementById('nameError').textContent = '이름을 입력해주세요.';
-        hasError = true;
-      }
-
-      if (newPassword && newPassword.length < 6) {
-        document.getElementById('newPasswordError').textContent = '비밀번호는 최소 6자 이상이어야 합니다.';
-        hasError = true;
-      }
-
-      if (newPassword && newPassword !== confirmPassword) {
-        document.getElementById('confirmPasswordError').textContent = '비밀번호가 일치하지 않습니다.';
-        hasError = true;
-      }
-
-      if (hasError) return;
-
-      // 서버로 전송
-      try {
-        const submitBtn = document.querySelector('.btn-submit');
-        submitBtn.disabled = true;
-        submitBtn.textContent = '저장 중...';
-
-        const response = await fetch('/api/auth/update_profile.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            nickname,
-            name,
-            password: newPassword || null
-          }),
-          credentials: 'include'
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-          alert('회원 정보가 수정되었습니다.');
-          window.location.href = 'profile.html';
-        } else {
-          alert(data.message || '수정에 실패했습니다.');
-          submitBtn.disabled = false;
-          submitBtn.textContent = '저장';
-        }
-      } catch (error) {
-        console.error('정보 수정 오류:', error);
-        alert('오류가 발생했습니다.');
-        document.querySelector('.btn-submit').disabled = false;
-        document.querySelector('.btn-submit').textContent = '저장';
+      const res=await fetch('/api/auth/update-profile.php',{method:'POST',body:formData,credentials:'include'});
+      const data=await res.json();
+      if(data.success){
+        alert('회원 정보가 수정되었습니다.');
+        window.location.href='profile.html';
+      }else{
+        alert(data.message||'수정 실패');
       }
     });
   </script>
