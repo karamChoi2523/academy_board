@@ -9,7 +9,11 @@ if (!$postId) {
     exit;
 }
 
-$query = "SELECT * FROM posts WHERE id = :id LIMIT 1";
+// posts와 users 테이블을 조인하여 author_nickname 가져오기
+$query = "SELECT p.*, u.nickname AS author_nickname 
+          FROM posts p
+          LEFT JOIN users u ON p.user_id = u.id
+          WHERE p.id = :id LIMIT 1";
 $stmt = $pdo->prepare($query);
 $stmt->bindParam(':id', $postId);
 $stmt->execute();
