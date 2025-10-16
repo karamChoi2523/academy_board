@@ -149,7 +149,7 @@
 </head>
 <body>
   <header>
-    <h1 onclick="goHome()">🌼 Haneul Academy</h1>
+    <h1 onclick="window.location.href = '/'">🌼 Haneul Academy</h1>
   </header>
 
   <main>
@@ -186,10 +186,6 @@
   </footer>
 
   <script>
-    function goHome() {
-      window.location.href = "index.html";
-    }
-
     // ✅ 프로필 이미지 미리보기
     const profileInput = document.getElementById('profile_image');
     const profilePreview = document.getElementById('profilePreview');

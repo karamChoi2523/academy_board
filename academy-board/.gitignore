@@ -16,7 +16,6 @@ tmp/
 cache/
 
 # ===== 업로드 파일 =====
-uploads/
 uploads_tmp/
 
 # ===== 백업 및 빌드 산출물 =====

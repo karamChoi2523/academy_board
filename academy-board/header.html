@@ -1,15 +1,22 @@
 <header class="site-header">
-  <h1 class="logo" onclick="goHome()">🌼 Haneul Academy</h1>
+  <h1 class="logo" onclick="window.location.href = '/'">🌼 Haneul Academy</h1>
   <nav id="main-nav">
-    <a href="notice.html">공지사항</a>
-    <a href="question.html">질문 게시판</a>
-    <a href="assignment.html">과제 게시판</a>
+    <a href="javascript:void(0)" onclick="goTo('board.html?type=notice')">공지사항</a>
+    <a href="javascript:void(0)" onclick="goTo('board.html?type=question')">질문 게시판</a>
+    <a href="javascript:void(0)" onclick="goTo('board.html?type=assignment')">과제 게시판</a>
     <a href="login.html" id="login-link">로그인</a>
     <a href="register.html" id="register-link">회원가입</a>
     <a href="#" id="logout-link" style="display:none;">로그아웃</a>
   </nav>
   <div class="menu-toggle" id="menu-toggle">☰</div>
 </header>
+
+<script>
+  // 페이지 이동 함수 (각 메뉴 클릭 시 사용)
+  function goTo(page) {
+    window.location.href = page;
+  }
+</script>
 
 <style>
   * {

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>게시물 수정</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Noto Sans KR", sans-serif;
+        background: #f8f9fa;
+        min-height: 100vh;
+        color: #333;
+      }
+      main {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        padding: 3rem 1rem;
+      }
+
+      main h2 {
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 2rem;
+        font-weight: 700;
+      }
+
+      .loading {
+        text-align: center;
+        color: #999;
+        font-size: 1rem;
+      }
+
+      form {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        width: 100%;
+        max-width: 700px;
+        border: 1px solid #e5e7eb;
+      }
+
+      .form-group {
+        margin-bottom: 2rem;
+      }
+
+      .form-group:last-of-type {
+        margin-bottom: 0;
+      }
+
+      label {
+        display: block;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.6rem;
+      }
+
+      input[type="text"],
+      input[type="select"],
+      textarea,
+      select {
+        width: 100%;
+        padding: 0.9rem 1rem;
+        font-size: 0.95rem;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 8px;
+        font-family: "Noto Sans KR", sans-serif;
+        transition: all 0.3s ease;
+        background: #fafbfc;
+      }
+
+      input[type="text"]:focus,
+      input[type="select"]:focus,
+      textarea:focus,
+      select:focus {
+        outline: none;
+        border-color: #4c9aff;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(76, 154, 255, 0.1);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 250px;
+        line-height: 1.6;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+      }
+
+      .form-row .form-group {
+        margin-bottom: 0;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2.5rem;
+      }
+
+      button {
+        flex: 1;
+        padding: 1rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn-submit {
+        background: #4c9aff;
+        color: white;
+      }
+
+      .btn-submit:hover {
+        background: #3a7fd4;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(76, 154, 255, 0.3);
+      }
+
+      .btn-submit:active {
+        transform: translateY(0);
+      }
+
+      .btn-cancel {
+        background: #f3f4f6;
+        color: #666;
+        border: 1.5px solid #e5e7eb;
+      }
+
+      .btn-cancel:hover {
+        background: #e5e7eb;
+        transform: translateY(-2px);
+      }
+
+      .btn-delete {
+        background: #ff6b6b;
+        color: white;
+      }
+
+      .btn-delete:hover {
+        background: #ff5252;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+      }
+
+      footer {
+        background: white;
+        text-align: center;
+        padding: 2rem;
+        color: #666;
+        font-size: 0.9rem;
+        border-top: 1px solid #e5e7eb;
+        margin-top: 3rem;
+      }
+
+      .character-count {
+        font-size: 0.8rem;
+        color: #999;
+        margin-top: 0.4rem;
+        text-align: right;
+      }
+
+      .character-count.warning {
+        color: #ff6b6b;
+      }
+
+      /* 반응형 */
+      @media (max-width: 768px) {
+        header {
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+        }
+
+        header h1 {
+          font-size: 1.5rem;
+        }
+
+        nav {
+          display: flex;
+          gap: 1rem;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        nav a {
+          margin-left: 0;
+          font-size: 0.85rem;
+        }
+
+        main {
+          padding: 2rem 1rem;
+        }
+
+        main h2 {
+          font-size: 1.6rem;
+          margin-bottom: 1.5rem;
+        }
+
+        form {
+          padding: 2rem;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+
+        .button-group {
+          flex-direction: column;
+        }
+      }
+
+      @media (max-width: 480px) {
+        main h2 {
+          font-size: 1.4rem;
+        }
+
+        form {
+          padding: 1.5rem;
+        }
+
+        label {
+          font-size: 0.9rem;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+          padding: 0.8rem 0.9rem;
+          font-size: 0.9rem;
+        }
+
+        textarea {
+          min-height: 180px;
+        }
+
+        button {
+          padding: 0.85rem;
+          font-size: 0.95rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+  <div id="header-container"></div>
+
+    <main>
+      <h2>✏️ 게시물 수정</h2>
+      <form id="postForm" style="display: none">
+  <div class="form-group">
+    <label for="title">제목 *</label>
+    <input
+      type="text"
+      id="title"
+      name="title"
+      placeholder="게시물의 제목을 입력하세요"
+      required
+    />
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label for="category">카테고리</label>
+      <select id="category" name="category">
+        <option value="">선택 안 함</option>
+        <option value="공지">공지</option>
+        <option value="질문">질문</option>
+        <option value="제출">제출</option>
+        <option value="과제">과제</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ✅ 첨부파일 영역을 이 위치로 이동 -->
+  <div class="form-group">
+    <label for="file">첨부파일</label>
+    <div id="currentFileBox" style="margin-bottom: 10px"></div>
+    <input type="file" id="file" name="file" />
+    <input type="hidden" id="existingFileName" name="existingFileName" />
+  </div>
+
+  <div class="form-group">
+    <label for="content">내용 *</label>
+    <textarea
+      id="content"
+      name="content"
+      placeholder="게시물의 내용을 입력하세요"
+      required
+    ></textarea>
+    <div class="character-count">
+      <span id="charCount">0</span> / 5000자
+    </div>
+  </div>
+
+  <div class="button-group">
+    <button type="submit" class="btn-submit">💾 게시물 수정</button>
+    <button type="button" class="btn-cancel" onclick="goBack()">취소</button>
+    <button type="button" class="btn-delete" onclick="deletePost()">🗑️ 삭제</button>
+  </div>
+</form>
+
+
+      <div class="loading" id="loading">게시물을 불러오는 중...</div>
+    </main>
+
+    <footer>© 2025 Haneul Academy Board · All Rights Reserved.</footer>
+
+    <script src="./js/common.js" defer></script>
+    <script>
+      let postId;
+
+      // 로그인 상태 확인
+      if (!sessionStorage.getItem("isLoggedIn")) {
+        alert("로그인 후에 이용해주세요.");
+        window.location.href = "login.html";
+      }
+
+      // URL에서 게시물 ID 가져오기
+      const params = new URLSearchParams(window.location.search);
+      postId = params.get("id");
+
+      // 뒤로가기 함수
+      function goBack() {
+        window.history.back();
+      }
+
+      // 게시물 삭제 함수
+      async function deletePost() {
+        if (!confirm("정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
+          return;
+        }
+
+        try {
+          const response = await fetch("/api/post/delete.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: postId }),
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            alert("게시물이 삭제되었습니다.");
+            window.location.href = "board.html";
+          } else {
+            alert("게시물 삭제에 실패했습니다.");
+          }
+        } catch (error) {
+          console.error("게시물 삭제 오류:", error);
+          alert("게시물 삭제 중 오류가 발생했습니다.");
+        }
+      }
+
+      // 게시물 정보 불러오기
+      async function loadPostDetails(postId) {
+        try {
+          const response = await fetch(`/api/post/read.php?id=${postId}`);
+          const data = await response.json();
+
+          if (data && data.title) {
+            document.getElementById("title").value = data.title;
+            document.getElementById("content").value = data.content;
+            if (data.category) {
+              document.getElementById("category").value = data.category;
+            }
+
+            // ✅ 첨부파일이 있으면 표시
+            const fileBox = document.getElementById("currentFileBox");
+            if (data.attachment_name && data.attachment_path) {
+              fileBox.innerHTML = `
+          <p>
+            현재 첨부파일:
+            <a href="/uploads/${data.attachment_path}" target="_blank">${data.attachment_name}</a>
+            <button type="button" id="deleteFileBtn" style="margin-left:10px; color:#fff; background:#ff6b6b; border:none; border-radius:4px; padding:4px 8px; cursor:pointer;">삭제</button>
+          </p>
+        `;
+              document.getElementById("existingFileName").value =
+                data.attachment_path;
+
+              document
+                .getElementById("deleteFileBtn")
+                .addEventListener("click", () => {
+                  if (confirm("첨부파일을 삭제하시겠습니까?")) {
+                    fileBox.innerHTML =
+                      "<p style='color:#999;'>첨부파일 없음</p>";
+                    document.getElementById("existingFileName").value = ""; // 삭제 표시
+                  }
+                });
+            } else {
+              fileBox.innerHTML = "<p style='color:#999;'>첨부파일 없음</p>";
+            }
+
+            document.getElementById("charCount").textContent =
+              data.content.length;
+            document.getElementById("postForm").style.display = "block";
+            document.getElementById("loading").style.display = "none";
+          } else {
+            alert("게시물 정보를 불러오는 데 오류가 발생했습니다.");
+          }
+        } catch (error) {
+          console.error("게시물 로드 오류:", error);
+          alert("게시물을 불러오는 중 오류가 발생했습니다.");
+        }
+      }
+
+      loadPostDetails(postId);
+
+      // 글자 수 카운트
+      document.getElementById("content").addEventListener("input", (e) => {
+        const count = e.target.value.length;
+        const countDisplay = document.getElementById("charCount");
+        countDisplay.textContent = count;
+
+        if (count > 4500) {
+          countDisplay.parentElement.classList.add("warning");
+        } else {
+          countDisplay.parentElement.classList.remove("warning");
+        }
+      });
+
+      // 폼 제출 처리
+      document
+        .getElementById("postForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const formData = new FormData();
+          formData.append("id", postId);
+          formData.append("title", document.getElementById("title").value);
+          formData.append("content", document.getElementById("content").value);
+          formData.append(
+            "category",
+            document.getElementById("category").value
+          );
+          formData.append(
+            "existingFileName",
+            document.getElementById("existingFileName").value
+          );
+
+          const newFile = document.getElementById("file").files[0];
+          if (newFile) formData.append("file", newFile);
+
+          try {
+            const response = await fetch("/api/post/update.php", {
+              method: "POST",
+              body: formData,
+            });
+
+            const result = await response.json();
+            if (result.success) {
+              alert("게시물이 수정되었습니다.");
+              window.location.href = `board-detail.html?id=${postId}`;
+            } else {
+              alert("게시물 수정에 실패했습니다.");
+            }
+          } catch (error) {
+            console.error("게시물 수정 오류:", error);
+            alert("게시물 수정 중 오류가 발생했습니다.");
+          }
+        });
+    </script>
+  </body>
+</html>
