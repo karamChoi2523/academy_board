@@ -334,7 +334,7 @@
     <div id="board-content"></div>
 
     <div class="btn-group">
-      <button class="btn btn-create" onclick="goTo()">✏️ 글 작성</button>
+      <button class="btn btn-create" onclick="goTo(`create.html?type=${boardType}`)">✏️ 글 작성</button>
     </div>
   </main>
 
@@ -346,10 +346,6 @@
 
   <script>
     let boardType;
-
-    function goTo() {
-      window.location.href = `create.html?type=${boardType}`;
-    }
 
     if (!sessionStorage.getItem('isLoggedIn')) {
       alert("로그인 후에 이용해주세요.");
