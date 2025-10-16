@@ -50,17 +50,20 @@ async function loadPostDetails(postId, postContent, deleteBtn, editBtn) {
         }
       }
 
-      // 본문 + 첨부파일 표시
+      const postDate = new Date(data.created_at);
+      const formattedDate = formatDate(postDate);
+
       postContent.innerHTML = `
         <h2>${data.title}</h2>
         <p style="margin-top:1.5rem; font-size:0.9rem; color:#666;">
-          <strong>작성일:</strong> ${data.created_at} &nbsp;|&nbsp;
+          <strong>작성일:</strong> ${formattedDate} &nbsp;|&nbsp;
           <strong>카테고리:</strong> ${data.category ?? '없음'} &nbsp;|&nbsp;
           <strong>작성자:</strong> ${data.author_nickname ?? '익명'}
         </p>
         <div style="margin:1rem 0; line-height:1.6;">${data.content}</div>
         ${attachmentHTML}
       `;
+
 
       // 작성자 확인 후 버튼 표시
       const loggedInUserId = sessionStorage.getItem('user_id');
@@ -174,8 +177,11 @@ async function loadComments(postId) {
   comments.forEach((comment) => {
     const commentElement = document.createElement("div");
     commentElement.classList.add("comment");
+    const commentDate = new Date(comment.created_at);
+    const formattedCommentDate = formatDate(commentDate);
+
     commentElement.innerHTML = `
-      <p><strong>${comment.author_nickname}</strong> (${comment.created_at}):</p>
+      <p><strong>${comment.author_nickname}</strong> (${formattedCommentDate}):</p>
       <p>${comment.content}</p>
       ${comment.isAuthor ? `<button class="btn-delete-comment" onclick="deleteComment(${comment.id})">🗑️ 삭제</button>` : ''}
     `;
@@ -215,4 +221,31 @@ async function deleteComment(commentId) {
 //const postId = new URLSearchParams(window.location.search).get("id");
 if (postId) {
   loadComments(postId);  // 해당 게시물의 댓글을 불러옵니다.
+}
+
+/**
+ * 날짜 포맷팅 함수
+ * 오늘이면 시간, 어제면 "어제", 그 외에는 날짜 표시
+ */
+function formatDate(date) {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  
+  const postDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  
+  if (postDate.getTime() === today.getTime()) {
+    // 오늘: 시간:분 형식
+    return date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false });
+  } else if (postDate.getTime() === yesterday.getTime()) {
+    // 어제
+    return '어제';
+  } else if (now.getFullYear() === date.getFullYear()) {
+    // 올해: 월-일 형식
+    return date.toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' });
+  } else {
+    // 작년 이전: 년-월-일 형식
+    return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric' });
+  }
 }
