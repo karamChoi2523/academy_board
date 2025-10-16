@@ -156,7 +156,7 @@ async function loadComments(postId) {
 }
 
 // 페이지 로드 시 댓글 불러오기
-const postId = new URLSearchParams(window.location.search).get("id");
+//const postId = new URLSearchParams(window.location.search).get("id");
 if (postId) {
   loadComments(postId);  // 해당 게시물의 댓글을 불러옵니다.
 }
