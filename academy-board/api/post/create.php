@@ -1,7 +1,7 @@
 <?php
 require_once '../../config/database.php';
 
-// POST 데이터는 multipart/form-data 형식으로 전송됨
+// POST 데이터 (multipart/form-data)
 $title = $_POST['title'] ?? '';
 $content = $_POST['content'] ?? '';
 $board_type = $_POST['board_type'] ?? 'notice';
@@ -15,11 +15,17 @@ if (!is_dir($uploadDir)) {
 }
 
 $file = $_FILES['file'] ?? null;
-$filePath = null;
+$storedName = null;
+$originalName = null;
+$fileType = null;
+$fileSize = null;
 
 if ($file && $file['error'] === UPLOAD_ERR_OK) {
-    $fileName = basename($file['name']);
-    $storedName = time() . '_' . $fileName; // 중복 방지
+    $originalName = basename($file['name']);
+    $storedName = time() . '_' . $originalName; // 중복 방지
+    $fileType = $file['type'] ?? '';
+    $fileSize = $file['size'] ?? 0;
+
     $filePath = $uploadDir . $storedName;
 
     if (!move_uploaded_file($file['tmp_name'], $filePath)) {
@@ -34,18 +40,32 @@ if (empty($title) || empty($content)) {
     exit;
 }
 
-// DB 저장
-$query = "INSERT INTO posts (category, title, content, board_type, user_id, created_at, file_path)
-          VALUES (:category, :title, :content, :board_type, :user_id, NOW(), :file_path)";
+// ✅ posts 테이블에 저장
+$query = "INSERT INTO posts (category, title, content, board_type, user_id, created_at)
+          VALUES (:category, :title, :content, :board_type, :user_id, NOW())";
 $stmt = $pdo->prepare($query);
 $stmt->bindParam(':title', $title);
 $stmt->bindParam(':content', $content);
 $stmt->bindParam(':board_type', $board_type);
 $stmt->bindParam(':user_id', $user_id);
 $stmt->bindParam(':category', $category);
-$stmt->bindParam(':file_path', $filePath);
 
 if ($stmt->execute()) {
+    $postId = $pdo->lastInsertId(); // 방금 저장된 게시물 ID 가져오기
+
+    // ✅ 첨부파일이 있으면 attachments 테이블에도 저장
+    if ($storedName) {
+        $fileInsert = "INSERT INTO attachments (post_id, original_name, stored_name, file_size, file_type)
+                       VALUES (:post_id, :original_name, :stored_name, :file_size, :file_type)";
+        $stmtFile = $pdo->prepare($fileInsert);
+        $stmtFile->bindParam(':post_id', $postId);
+        $stmtFile->bindParam(':original_name', $originalName);
+        $stmtFile->bindParam(':stored_name', $storedName);
+        $stmtFile->bindParam(':file_size', $fileSize);
+        $stmtFile->bindParam(':file_type', $fileType);
+        $stmtFile->execute();
+    }
+
     echo json_encode(['success' => true, 'message' => '게시물이 생성되었습니다.']);
 } else {
     echo json_encode(['success' => false, 'message' => '게시물 생성에 실패했습니다.']);
