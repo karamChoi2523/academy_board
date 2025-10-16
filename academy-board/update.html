@@ -299,53 +299,58 @@
     <main>
       <h2>✏️ 게시물 수정</h2>
       <form id="postForm" style="display: none">
-        <div class="form-group">
-          <label for="title">제목 *</label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            placeholder="게시물의 제목을 입력하세요"
-            required
-          />
-        </div>
+  <div class="form-group">
+    <label for="title">제목 *</label>
+    <input
+      type="text"
+      id="title"
+      name="title"
+      placeholder="게시물의 제목을 입력하세요"
+      required
+    />
+  </div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label for="category">카테고리</label>
-            <select id="category" name="category">
-              <option value="">선택 안 함</option>
-              <option value="공지">공지</option>
-              <option value="질문">질문</option>
-              <option value="제출">제출</option>
-              <option value="과제">과제</option>
-            </select>
-          </div>
-        </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="category">카테고리</label>
+      <select id="category" name="category">
+        <option value="">선택 안 함</option>
+        <option value="공지">공지</option>
+        <option value="질문">질문</option>
+        <option value="제출">제출</option>
+        <option value="과제">과제</option>
+      </select>
+    </div>
+  </div>
 
-        <div class="form-group">
-          <label for="content">내용 *</label>
-          <textarea
-            id="content"
-            name="content"
-            placeholder="게시물의 내용을 입력하세요"
-            required
-          ></textarea>
-          <div class="character-count">
-            <span id="charCount">0</span> / 5000자
-          </div>
-        </div>
+  <!-- ✅ 첨부파일 영역을 이 위치로 이동 -->
+  <div class="form-group">
+    <label for="file">첨부파일</label>
+    <div id="currentFileBox" style="margin-bottom: 10px"></div>
+    <input type="file" id="file" name="file" />
+    <input type="hidden" id="existingFileName" name="existingFileName" />
+  </div>
 
-        <div class="button-group">
-          <button type="submit" class="btn-submit">💾 게시물 수정</button>
-          <button type="button" class="btn-cancel" onclick="goBack()">
-            취소
-          </button>
-          <button type="button" class="btn-delete" onclick="deletePost()">
-            🗑️ 삭제
-          </button>
-        </div>
-      </form>
+  <div class="form-group">
+    <label for="content">내용 *</label>
+    <textarea
+      id="content"
+      name="content"
+      placeholder="게시물의 내용을 입력하세요"
+      required
+    ></textarea>
+    <div class="character-count">
+      <span id="charCount">0</span> / 5000자
+    </div>
+  </div>
+
+  <div class="button-group">
+    <button type="submit" class="btn-submit">💾 게시물 수정</button>
+    <button type="button" class="btn-cancel" onclick="goBack()">취소</button>
+    <button type="button" class="btn-delete" onclick="deletePost()">🗑️ 삭제</button>
+  </div>
+</form>
+
 
       <div class="loading" id="loading">게시물을 불러오는 중...</div>
 
