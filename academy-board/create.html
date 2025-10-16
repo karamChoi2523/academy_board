@@ -281,7 +281,7 @@
 
     <main>
       <h2>✏️ 새 게시물 작성</h2>
-      <form id="postForm">
+      <form id="postForm" enctype="multipart/form-data">
         <div class="form-group">
           <label for="title">제목 *</label>
           <input
@@ -317,6 +317,11 @@
           <div class="character-count">
             <span id="charCount">0</span> / 5000자
           </div>
+        </div>
+
+        <div class="form-group">
+          <label for="file">첨부파일</label>
+          <input type="file" id="file" name="file" />
         </div>
 
         <div class="button-group">
@@ -362,51 +367,49 @@
   });
 
   // 폼 제출 처리
-  document
-    .getElementById("postForm")
-    .addEventListener("submit", async (e) => {
-      e.preventDefault(); // 기본 폼 제출을 막습니다.
+  document.getElementById("postForm").addEventListener("submit", async (e) => {
+  e.preventDefault(); // 기본 폼 제출을 막습니다.
 
-      const title = document.getElementById("title").value;
-      const content = document.getElementById("content").value;
-      const category = document.getElementById("category").value || null;
+  const title = document.getElementById("title").value;
+  const content = document.getElementById("content").value;
+  const category = document.getElementById("category").value || null;
+  const file = document.getElementById("file").files[0]; // 첨부된 파일
 
-      // 제목, 내용, 카테고리가 비어있으면 alert 메시지를 띄우고 제출하지 않음
-      if (!title || !content || !category) {
-        alert("제목, 내용, 카테고리를 모두 입력해주세요.");
-        return; // 입력이 부족하면 아래 코드 실행을 멈춤
-      }
+  // 제목, 내용, 카테고리가 비어있으면 alert 메시지를 띄우고 제출하지 않음
+  if (!title || !content || !category) {
+    alert("제목, 내용, 카테고리를 모두 입력해주세요.");
+    return; // 입력이 부족하면 아래 코드 실행을 멈춤
+  }
 
-      const postData = {
-        title,
-        content,
-        category,
-        board_type: boardType,
-        user_id: sessionStorage.getItem("user_id"),
-      };
+  // FormData 객체 생성 (파일 전송 포함)
+  const formData = new FormData();
+  formData.append("title", title);
+  formData.append("content", content);
+  formData.append("category", category);
+  formData.append("file", file); // 첨부파일 추가
+  formData.append("user_id", sessionStorage.getItem("user_id"));
+  formData.append("board_type", boardType);
 
-      try {
-        const response = await fetch("/api/post/create.php", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(postData),
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-          alert("게시물이 작성되었습니다.");
-          window.location.href = `board.html?type=${boardType}`;
-        } else {
-          alert("게시물 작성에 실패했습니다.");
-        }
-      } catch (error) {
-        console.error("게시물 작성 오류:", error);
-        alert("게시물 작성 중 오류가 발생했습니다.");
-      }
+  try {
+    const response = await fetch("/api/post/create.php", {
+      method: "POST",
+      body: formData, // FormData를 직접 전송
     });
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert("게시물이 작성되었습니다.");
+      window.location.href = `board.html?type=${boardType}`;
+    } else {
+      alert("게시물 작성에 실패했습니다.");
+    }
+  } catch (error) {
+    console.error("게시물 작성 오류:", error);
+    alert("게시물 작성 중 오류가 발생했습니다.");
+  }
+});
+
 </script>
   </body>
 </html>
