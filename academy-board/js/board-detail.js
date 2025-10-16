@@ -28,7 +28,7 @@ async function loadPostDetails(postId, postContent, deleteBtn, editBtn) {
         <p>${data.content}</p>
         <p><strong>작성일:</strong> ${data.created_at}</p>
         <p><strong>카테고리:</strong> ${data.category}</p> <!-- 카테고리 추가 -->
-        <p><strong>작성자:</strong> ${data.nickname}</p> <!-- 작성자 추가 -->
+        <p><strong>작성자:</strong> ${data.author_nickname}</p> <!-- 작성자 추가 -->
       `;
 
       // 게시물 작성자와 로그인한 사용자가 일치하는지 확인
