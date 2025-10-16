@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>게시판</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
   <style>
     /* 기본 스타일 */
     body {
@@ -159,10 +162,14 @@
     © 2025 Haneul Academy Board · All Rights Reserved.
   </footer>
 
+  <!-- board.js 추가 -->
+  <script src="./js/board.js" defer></script>
+
   <script>
     function goTo(page) {
       window.location.href = page;
     }
+
     if (!sessionStorage.getItem('isLoggedIn')) {
       alert("로그인 후에 이용해주세요.");
       window.location.href = "login.html";  // 로그인 페이지로 이동
@@ -180,37 +187,6 @@
       boardTitle.innerText = "질문 게시판";
     } else if (boardType === "assignment") {
       boardTitle.innerText = "과제 게시판";
-    }
-
-    // 게시물 목록 로딩 함수
-    async function loadBoardList(boardType) {
-      const boardContent = document.getElementById("board-content");
-      try {
-        // 게시물 목록을 가져오기 위한 API 호출
-        const response = await fetch(`/api/post/read.php?type=${boardType}`);
-        const data = await response.json();
-
-        if (data && data.length > 0) {
-          const list = document.createElement('ul');
-          
-          // 게시물 목록을 동적으로 생성
-          data.forEach(post => {
-            const listItem = document.createElement('li');
-            listItem.innerHTML = `
-              <a href="board-detail.html?id=${post.id}">${post.title}</a>
-              <p>${post.created_at}</p>
-            `;
-            list.appendChild(listItem);
-          });
-
-          boardContent.appendChild(list);
-        } else {
-          boardContent.innerHTML = "<p>게시물이 없습니다.</p>";
-        }
-      } catch (error) {
-        console.error('게시물 목록 로딩 오류:', error);
-        boardContent.innerHTML = "<p>게시물 목록을 불러오는 데 오류가 발생했습니다.</p>";
-      }
     }
 
     // 게시물 목록을 로딩
