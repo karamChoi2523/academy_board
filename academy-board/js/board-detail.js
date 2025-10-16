@@ -110,7 +110,7 @@ document.getElementById("commentForm").addEventListener("submit", async (e) => {
   };
 
   try {
-    const response = await fetch("/api/comments/create_comment.php", {
+    const response = await fetch("/api/comments/create.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
