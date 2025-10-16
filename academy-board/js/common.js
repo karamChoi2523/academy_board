@@ -1,4 +1,12 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  // ✅ 폰트가 head에 없을 경우 자동 추가
+if (!document.querySelector('link[href*="Noto+Sans+KR"]')) {
+  const fontLink = document.createElement("link");
+  fontLink.rel = "stylesheet";
+  fontLink.href = "https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap";
+  document.head.appendChild(fontLink);
+}
+
   // 1️⃣ 헤더를 불러올 컨테이너 확보
   let headerContainer = document.getElementById("header-container");
   if (!headerContainer) {
