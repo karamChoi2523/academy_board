@@ -110,7 +110,7 @@ document.getElementById("commentForm").addEventListener("submit", async (e) => {
   };
 
   try {
-    const response = await fetch("/api/comments/create.php", {
+    const response = await fetch("/api/comment/create.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -133,7 +133,7 @@ document.getElementById("commentForm").addEventListener("submit", async (e) => {
 
 // 댓글 조회
 async function loadComments(postId) {
-  const response = await fetch(`/api/comments/get_comments.php?post_id=${postId}`);
+  const response = await fetch(`/api/comment/get_comments.php?post_id=${postId}`);
   const comments = await response.json();
 
   const commentsContainer = document.getElementById("commentsContainer");
