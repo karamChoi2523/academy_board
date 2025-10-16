@@ -85,6 +85,10 @@
       window.location.href = "login.html";
     }
 
+    function goTo(page) {
+    window.location.href = page;
+  }
+
     const params = new URLSearchParams(window.location.search);
     const postId = params.get("id");  // 게시물 ID 가져오기
 
@@ -131,8 +135,6 @@ async function loadPostDetails(postId) {
     postContent.innerHTML = "<p>게시물이 존재하지 않거나 오류가 발생했습니다.</p>";
   }
 }
-
-
     loadPostDetails(postId);
 
     // 게시물 삭제 함수
