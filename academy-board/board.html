@@ -192,11 +192,9 @@
       boardTitle.innerText = "질문 게시판";
     } else if (boardType === "homework") {
       boardTitle.innerText = "과제 게시판";
-    } else {
-      boardTitle.innerText = "게시판";
     }
 
-    // 로그인 상태 확인 및 리다이렉트 (common.js에서 처리한 로그인 체크)
+    // 로그인 상태 확인 및 리다이렉트
     if (!sessionStorage.getItem('isLoggedIn')) {
       alert("로그인 후에 이용해주세요.");
       window.location.href = "login.html";  // 로그인 페이지로 이동

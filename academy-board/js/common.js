@@ -2,13 +2,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const headerContainer = document.createElement("div");
   document.body.prepend(headerContainer);
 
+  // 🔥 변수 선언을 try 블록 밖으로!
   let loginLink, registerLink, logoutLink, menuToggle, nav;
 
   try {
     // 1️⃣ header.html 불러오기
     const res = await fetch("header.html");
-    if (!res.ok) throw new Error(`헤더 로드 실패: ${res.status}`);
-   
     const html = await res.text();
     headerContainer.innerHTML = html;
 
@@ -35,30 +34,20 @@ document.addEventListener("DOMContentLoaded", async () => {
       credentials: "include",
       cache: "no-store"
     });
-   
-    if (!sessionRes.ok) {
-      throw new Error(`세션 확인 실패: ${sessionRes.status}`);
-    }
-   
     const result = await sessionRes.json();
 
-    // UI 업데이트 함수
+    // 로그인 상태 확인 후 UI 업데이트
     const updateUI = (isLoggedIn) => {
-      const guestView = document.getElementById("guest-view");
-      const userView = document.getElementById("user-view");
-
       if (isLoggedIn) {
-        loginLink?.style.setProperty('display', 'none');
-        registerLink?.style.setProperty('display', 'none');
-        logoutLink?.style.setProperty('display', 'inline-block');
-        guestView?.style.setProperty('display', 'none');
-        userView?.style.setProperty('display', 'block');
+        // 로그인 상태
+        if (loginLink) loginLink.style.display = "none";
+        if (registerLink) registerLink.style.display = "none";
+        if (logoutLink) logoutLink.style.display = "inline-block";
       } else {
-        loginLink?.style.setProperty('display', 'inline-block');
-        registerLink?.style.setProperty('display', 'inline-block');
-        logoutLink?.style.setProperty('display', 'none');
-        guestView?.style.setProperty('display', 'block');
-        userView?.style.setProperty('display', 'none');
+        // 비로그인 상태
+        if (loginLink) loginLink.style.display = "inline-block";
+        if (registerLink) registerLink.style.display = "inline-block";
+        if (logoutLink) logoutLink.style.display = "none";
       }
     };
 
@@ -69,14 +58,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log(`🔹 로그인됨: ${result.user.nickname} (${result.user.role})`);
     }
 
-    // 4️⃣ 공개 페이지 목록
-    const publicPages = ['/login.html', '/index.html', '/register.html', '/'];
-    const currentPath = window.location.pathname;
-   
-    // 로그인되지 않았고, 공개 페이지가 아닌 경우만 리다이렉트
-    if (!result.logged_in && !publicPages.some(page => currentPath.endsWith(page))) {
+    // 4️⃣ 로그인되지 않으면 로그인 페이지로 리다이렉트
+    if (!result.logged_in && window.location.pathname !== '/login.html') {
       alert("로그인 후 사용해주세요.");
-      window.location.href = "login.html";
+      window.location.href = "login.html";  // 로그인 페이지로 이동
     }
 
     // 5️⃣ 로그아웃 이벤트
@@ -92,20 +77,23 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
 
           if (!res.ok) {
-            throw new Error(`로그아웃 요청 실패: ${res.status}`);
+            throw new Error(`HTTP ${res.status}`);
           }
 
           const result = await res.json();
 
           if (result.success) {
             alert("로그아웃 되었습니다.");
+
+            // UI 즉시 업데이트
             updateUI(false);
-           
+
+            // 메인 페이지로 이동
             setTimeout(() => {
               window.location.href = "index.html";
             }, 300);
           } else {
-            alert(result.message || "로그아웃 중 오류가 발생했습니다.");
+            alert("로그아웃 중 오류가 발생했습니다.");
           }
         } catch (err) {
           console.error("로그아웃 실패:", err);
@@ -116,9 +104,5 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   } catch (err) {
     console.error("헤더 로딩 또는 세션 확인 실패:", err);
-    // 에러 발생 시에도 기본 UI는 표시되도록
-    if (loginLink) loginLink.style.display = "inline-block";
-    if (registerLink) registerLink.style.display = "inline-block";
   }
 });
-

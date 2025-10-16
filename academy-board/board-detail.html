@@ -1,89 +1,80 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>게시물 상세</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    /* 기본 스타일 */
-    body {
-      font-family: 'Noto Sans KR', sans-serif;
-      background: #f9f9f9;
-      margin: 0;
-      padding: 0;
+document.addEventListener("DOMContentLoaded", async () => {
+  const params = new URLSearchParams(window.location.search);
+  const postId = params.get("id"); // 게시물 ID 가져오기
+
+  const postContent = document.getElementById("post-content");
+  const deleteBtn = document.getElementById("delete-btn");
+
+  // 로그인 상태 확인
+  if (!sessionStorage.getItem('isLoggedIn')) {
+    alert("로그인 후에 이용해주세요.");
+    window.location.href = "login.html";  // 로그인 페이지로 이동
+    return; // 더 이상 아래 코드 실행하지 않음
+  }
+
+  // 게시물 상세 내용 불러오기
+  await loadPostDetails(postId, postContent, deleteBtn);
+});
+
+/**
+ * 게시물 상세 내용 로딩 함수
+ * @param {string} postId - 게시물 ID
+ * @param {HTMLElement} postContent - 콘텐츠를 삽입할 HTML 요소
+ * @param {HTMLElement} deleteBtn - 삭제 버튼
+ */
+async function loadPostDetails(postId, postContent, deleteBtn) {
+  try {
+    const response = await fetch(`/api/post/read.php?id=${postId}`);
+    const data = await response.json();
+
+    if (data && data.title) {
+      postContent.innerHTML = `
+        <h2>${data.title}</h2>
+        <p>${data.content}</p>
+        <p><strong>작성일:</strong> ${data.created_at}</p>
+      `;
+
+      // 삭제 버튼 보이게 하기
+      deleteBtn.style.display = "inline-block";
+      deleteBtn.addEventListener("click", async () => {
+        const confirmDelete = confirm("정말로 삭제하시겠습니까?");
+        if (confirmDelete) {
+          await deletePost(postId);
+        }
+      });
+    } else {
+      postContent.innerHTML = "<p>게시물이 존재하지 않거나 오류가 발생했습니다.</p>";
     }
+  } catch (error) {
+    console.error('게시물 상세 로딩 오류:', error);
+    postContent.innerHTML = "<p>게시물 상세 정보를 불러오는 데 오류가 발생했습니다.</p>";
+  }
+}
 
-    header {
-      background: #4c9aff;
-      color: white;
-      padding: 1rem 2rem;
+/**
+ * 게시물 삭제 함수
+ * @param {string} postId - 게시물 ID
+ */
+async function deletePost(postId) {
+  try {
+    const response = await fetch('/api/post/delete.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: postId }),
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      alert('게시물이 삭제되었습니다.');
+      window.location.href = 'board.html'; // 게시판 목록 페이지로 리다이렉트
+    } else {
+      alert('게시물 삭제에 실패했습니다.');
     }
-
-    #post-content {
-      padding: 2rem;
-      background: white;
-      margin-top: 1rem;
-    }
-
-    footer {
-      background: #f2f7ff;
-      text-align: center;
-      padding: 1rem;
-      color: #777;
-    }
-
-    #delete-btn {
-      background-color: #ff4c4c;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    #delete-btn:hover {
-      background-color: #ff2b2b;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>게시물 상세</h1>
-  </header>
-
-  <main id="post-content">
-    <!-- 게시물 상세 내용이 여기에 표시됩니다. -->
-  </main>
-
-  <button id="delete-btn" style="display: none;">삭제</button>
-
-  <footer>
-    <p>&copy; 2025 게시판</p>
-  </footer>
-
-  <script src="./js/board-detail.js" defer></script>
-
-  <script>
-    // 로그인 상태 확인 및 리다이렉트
-    if (!sessionStorage.getItem('isLoggedIn')) {
-      alert("로그인 후에 이용해주세요.");
-      window.location.href = "login.html";  // 로그인 페이지로 이동
-    }
-
-    // URL에서 'type' 파라미터 가져오기
-    const params = new URLSearchParams(window.location.search);
-    const boardType = params.get("type");
-
-    // 게시판 제목 동적 표시
-    const headerTitle = document.querySelector('header h1');
-    if (boardType === "notice") {
-      headerTitle.innerText = "공지사항 게시판 - 게시물 상세";
-    } else if (boardType === "qna") {
-      headerTitle.innerText = "질문 게시판 - 게시물 상세";
-    } else if (boardType === "homework") {
-      headerTitle.innerText = "과제 게시판 - 게시물 상세";
-    }
-  </script>
-</body>
-</html>
+  } catch (error) {
+    console.error('삭제 오류:', error);
+    alert('삭제 처리에 문제가 발생했습니다.');
+  }
+}
