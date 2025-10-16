@@ -144,39 +144,14 @@
   <main>
     <h2 id="board-title"></h2>
 
-    <!-- 비로그인 상태에서 보이는 화면 -->
-    <div id="guest-view">
-      <h2>환영합니다 🌟</h2>
-      <p>학생과 선생님이 함께 성장하는 공간,<br>하늘 아카데미 게시판입니다.</p>
-
-      <div class="btn-group">
-        <button class="btn btn-login" onclick="goTo('login.html')">로그인</button>
-        <button class="btn btn-register" onclick="goTo('register.html')">회원가입</button>
-      </div>
+    <!-- 게시물 목록을 표시할 부분 -->
+    <div id="board-content">
+      <!-- 게시물 목록이 여기에 동적으로 추가됩니다. -->
     </div>
 
-    <!-- 로그인 후 보이는 화면 -->
-    <div id="user-view" style="display:none;">
-      <h2>게시판 목록 📚</h2>
-      <div class="card-container">
-        <div class="card" onclick="goTo('board.html?type=notice')">
-          <h3>공지사항</h3>
-          <p>학원 내 주요 공지사항을 확인하세요.</p>
-        </div>
-        <div class="card" onclick="goTo('board.html?type=question')">
-          <h3>질문 게시판</h3>
-          <p>궁금한 점을 자유롭게 질문하세요.</p>
-        </div>
-        <div class="card" onclick="goTo('board.html?type=assignment')">
-          <h3>과제 게시판</h3>
-          <p>과제 제출 및 피드백을 확인하세요.</p>
-        </div>
-      </div>
-
-      <!-- 글 작성 버튼 -->
-      <div class="btn-group">
-        <button class="btn btn-create" onclick="goTo('create.html')">글 작성</button>
-      </div>
+    <!-- 글 작성 버튼 -->
+    <div class="btn-group">
+      <button class="btn btn-create" onclick="goTo('create.html')">글 작성</button>
     </div>
   </main>
 
@@ -208,6 +183,40 @@
     } else if (boardType === "assignment") {
       boardTitle.innerText = "과제 게시판";
     }
+
+    // 게시물 목록 로딩 함수
+    async function loadBoardList(boardType) {
+      const boardContent = document.getElementById("board-content");
+      try {
+        // 게시물 목록을 가져오기 위한 API 호출
+        const response = await fetch(`/api/post/read.php?type=${boardType}`);
+        const data = await response.json();
+
+        if (data && data.length > 0) {
+          const list = document.createElement('ul');
+          
+          // 게시물 목록을 동적으로 생성
+          data.forEach(post => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `
+              <a href="board-detail.html?id=${post.id}">${post.title}</a>
+              <p>${post.created_at}</p>
+            `;
+            list.appendChild(listItem);
+          });
+
+          boardContent.appendChild(list);
+        } else {
+          boardContent.innerHTML = "<p>게시물이 없습니다.</p>";
+        }
+      } catch (error) {
+        console.error('게시물 목록 로딩 오류:', error);
+        boardContent.innerHTML = "<p>게시물 목록을 불러오는 데 오류가 발생했습니다.</p>";
+      }
+    }
+
+    // 게시물 목록을 로딩
+    loadBoardList(boardType);
   </script>
 </body>
 </html>

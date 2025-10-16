@@ -4,6 +4,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const boardContent = document.getElementById("board-content");
 
+  // 로그인 상태 확인
+  if (!sessionStorage.getItem('isLoggedIn')) {
+    alert("로그인 후 사용해주세요.");
+    window.location.href = "login.html";  // 로그인 페이지로 이동
+  }
+
   // 게시물 목록을 불러오는 함수
   await loadBoardList(boardType, boardContent);
 });
