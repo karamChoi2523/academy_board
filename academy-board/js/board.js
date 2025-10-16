@@ -1,35 +1,45 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const params = new URLSearchParams(window.location.search);
-  const boardType = params.get("type"); // 'notice', 'qna', 'homework' 등
-
-  const boardContent = document.getElementById("board-content");
-
   // 로그인 상태 확인
   if (!sessionStorage.getItem('isLoggedIn')) {
     alert("로그인 후 사용해주세요.");
-    window.location.href = "login.html";  // 로그인 페이지로 이동
+    window.location.href = "login.html";
+    return;
   }
 
-  // 게시물 목록을 불러오는 함수
+  // URL에서 파라미터 가져오기
+  const params = new URLSearchParams(window.location.search);
+  boardType = params.get("type") || "notice";
+/*
+  // 게시판 제목 설정
+  const boardTitle = document.getElementById("board-title");
+  const titles = {
+    "notice": "공지사항 게시판",
+    "question": "질문 게시판",
+    "assignment": "과제 게시판"
+  };
+  boardTitle.innerText = titles[boardType] || "게시판";
+  */
+
+  // 게시물 목록 로드 (단 1회만 호출)
+  const boardContent = document.getElementById("board-content");
   await loadBoardList(boardType, boardContent);
 });
 
 /**
  * 게시물 목록 로딩 함수
- * @param {string} boardType - 게시판 종류 (notice, qna, homework 등)
- * @param {HTMLElement} boardContent - 콘텐츠를 삽입할 HTML 요소
  */
 async function loadBoardList(boardType, boardContent) {
   try {
-    // 게시물 목록을 가져오기 위한 API 호출
-    const response = await fetch(`/api/post/list.php?type=${boardType}`);
+    const response = await fetch(`./api/post/list.php?type=${boardType}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const data = await response.json();
 
     if (data && data.length > 0) {
-      boardContent.innerHTML = "<h2>게시물 목록</h2>";
       const list = document.createElement('ul');
-      
-      // 게시물 목록을 동적으로 생성
       data.forEach(post => {
         const listItem = document.createElement('li');
         listItem.innerHTML = `
@@ -38,7 +48,6 @@ async function loadBoardList(boardType, boardContent) {
         `;
         list.appendChild(listItem);
       });
-      
       boardContent.appendChild(list);
     } else {
       boardContent.innerHTML = "<p>게시물이 없습니다.</p>";
