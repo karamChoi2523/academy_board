@@ -197,7 +197,7 @@
         alert(result.message);
 
         if (result.success) {
-          // 🔧 localStorage 대신 sessionStorage 사용
+          // 🔧 sessionStorage 사용
           sessionStorage.setItem("isLoggedIn", "true");
           sessionStorage.setItem("user", JSON.stringify(result.data.user));
           window.location.href = "index.html";

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>게시물 작성</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* 기본 스타일 */
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #4c9aff;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      padding: 4rem 1rem;
+      text-align: center;
+    }
+    main h2 {
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+    form {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 1rem;
+      background: #4c9aff;
+      color: white;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #3d8bef;
+    }
+    footer {
+      background: #f2f7ff;
+      text-align: center;
+      padding: 1rem 0;
+      color: #777;
+      font-size: 0.9rem;
+      border-top: 1px solid #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>게시물 작성</h1>
+  </header>
+
+  <main>
+    <h2>새 게시물 작성</h2>
+    <form id="postForm">
+      <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
+      <textarea id="content" name="content" rows="6" placeholder="내용을 입력하세요" required></textarea>
+      <button type="submit">게시물 작성</button>
+    </form>
+  </main>
+
+  <footer>
+    © 2025 Haneul Academy Board · All Rights Reserved.
+  </footer>
+
+  <script>
+    // 로그인 상태 확인
+    if (!sessionStorage.getItem('isLoggedIn')) {
+      alert("로그인 후에 이용해주세요.");
+      window.location.href = "login.html";  // 로그인 페이지로 이동
+    }
+
+    // 폼 제출 처리
+    document.getElementById('postForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const title = document.getElementById('title').value;
+      const content = document.getElementById('content').value;
+
+      const postData = {
+        title,
+        content,
+      };
+
+      try {
+        const response = await fetch('/api/post/create.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(postData),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert('게시물이 작성되었습니다.');
+          window.location.href = 'board.html'; // 게시판 목록으로 리다이렉트
+        } else {
+          alert('게시물 작성에 실패했습니다.');
+        }
+      } catch (error) {
+        console.error('게시물 작성 오류:', error);
+        alert('게시물 작성 중 오류가 발생했습니다.');
+      }
+    });
+  </script>
+</body>
+</html>

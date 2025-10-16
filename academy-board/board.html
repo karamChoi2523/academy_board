@@ -77,6 +77,10 @@
       color: #4c9aff;
       border: 2px solid #4c9aff;
     }
+    .btn-create {
+      background: green;
+      color: white;
+    }
     .btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -154,7 +158,25 @@
     <!-- 로그인 후 보이는 화면 -->
     <div id="user-view" style="display:none;">
       <h2>게시판 목록 📚</h2>
-      <div id="board-content"></div>
+      <div class="card-container">
+        <div class="card" onclick="goTo('board.html?type=notice')">
+          <h3>공지사항</h3>
+          <p>학원 내 주요 공지사항을 확인하세요.</p>
+        </div>
+        <div class="card" onclick="goTo('board.html?type=question')">
+          <h3>질문 게시판</h3>
+          <p>궁금한 점을 자유롭게 질문하세요.</p>
+        </div>
+        <div class="card" onclick="goTo('board.html?type=assignment')">
+          <h3>과제 게시판</h3>
+          <p>과제 제출 및 피드백을 확인하세요.</p>
+        </div>
+      </div>
+
+      <!-- 글 작성 버튼 -->
+      <div class="btn-group">
+        <button class="btn btn-create" onclick="goTo('create.html')">글 작성</button>
+      </div>
     </div>
   </main>
 
