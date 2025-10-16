@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원 정보</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f8f9fa;
+      min-height: 100vh;
+      color: #333;
+    }
+
+    main {
+      max-width: 600px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+    }
+
+    .profile-container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      padding: 2rem;
+    }
+
+    .profile-container h2 {
+      font-size: 1.8rem;
+      color: #333;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .profile-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .profile-item:last-child {
+      border-bottom: none;
+    }
+
+    .profile-label {
+      font-weight: 600;
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    .profile-value {
+      color: #333;
+      font-size: 0.95rem;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      flex: 1;
+      min-width: 120px;
+      padding: 0.8rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-edit {
+      background: #4c9aff;
+      color: white;
+    }
+
+    .btn-edit:hover {
+      background: #3a7fd4;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(76, 154, 255, 0.3);
+    }
+
+    .btn-back {
+      background: #e5e7eb;
+      color: #333;
+    }
+
+    .btn-back:hover {
+      background: #d1d5db;
+      transform: translateY(-2px);
+    }
+
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: #999;
+    }
+
+    .error {
+      background: #fee;
+      color: #c33;
+      padding: 1rem;
+      border-radius: 6px;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    footer {
+      background: white;
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+      font-size: 0.9rem;
+      border-top: 1px solid #e5e7eb;
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 600px) {
+      main {
+        margin: 2rem auto;
+      }
+
+      .profile-container {
+        padding: 1.5rem;
+      }
+
+      .profile-container h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="header-container"></div>
+
+  <main>
+    <div class="profile-container">
+      <h2>👤 회원 정보</h2>
+      <div id="profile-content" class="loading">로딩 중...</div>
+      <div class="btn-group">
+        <button class="btn btn-edit" onclick="goToEdit()">수정하기</button>
+        <button class="btn btn-back" onclick="goBack()">돌아가기</button>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    © 2025 Haneul Academy Board · All Rights Reserved.
+  </footer>
+
+  <script src="./js/common.js" defer></script>
+  <script>
+    function goTo(page) {
+      window.location.href = page;
+    }
+
+    function goToEdit() {
+      window.location.href = 'profile-edit.html';
+    }
+
+    function goBack() {
+      window.history.back();
+    }
+
+    // 로그인 상태 확인
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!sessionStorage.getItem('isLoggedIn')) {
+        alert("로그인 후 이용해주세요.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      await loadUserProfile();
+    });
+
+    // 사용자 정보 불러오기
+    async function loadUserProfile() {
+      try {
+        const response = await fetch('/api/auth/get_profile.php', {
+          method: 'GET',
+          credentials: 'include',
+          cache: 'no-store'
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.success && data.user) {
+          displayUserProfile(data.user);
+        } else {
+          showError('사용자 정보를 불러올 수 없습니다.');
+        }
+      } catch (error) {
+        console.error('프로필 로딩 오류:', error);
+        showError('프로필 정보를 불러오는 중 오류가 발생했습니다.');
+      }
+    }
+
+    // 사용자 정보 표시
+    function displayUserProfile(user) {
+      const profileContent = document.getElementById('profile-content');
+      const joinDate = new Date(user.created_at).toLocaleDateString('ko-KR');
+
+      profileContent.innerHTML = `
+        <div class="profile-item">
+          <span class="profile-label">이메일</span>
+          <span class="profile-value">${escapeHtml(user.email)}</span>
+        </div>
+        <div class="profile-item">
+          <span class="profile-label">닉네임</span>
+          <span class="profile-value">${escapeHtml(user.nickname)}</span>
+        </div>
+        <div class="profile-item">
+          <span class="profile-label">이름</span>
+          <span class="profile-value">${escapeHtml(user.name)}</span>
+        </div>
+        <div class="profile-item">
+          <span class="profile-label">가입일</span>
+          <span class="profile-value">${joinDate}</span>
+        </div>
+      `;
+    }
+
+    // 오류 표시
+    function showError(message) {
+      const profileContent = document.getElementById('profile-content');
+      profileContent.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
+    }
+
+    // XSS 방지
+    function escapeHtml(text) {
+      if (!text) return '';
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+  </script>
+</body>
+</html>
