@@ -179,15 +179,17 @@
     }
 
     // 로그인 상태 확인 후, `guest-view`와 `user-view` 전환
-    if (sessionStorage.getItem('isLoggedIn') === 'true') {
-      // 로그인 상태일 때
-      document.getElementById('guest-view').style.display = 'none';  // 비로그인 화면 숨기기
-      document.getElementById('user-view').style.display = 'block';  // 로그인 후 화면 보이기
-    } else {
-      // 비로그인 상태일 때
-      document.getElementById('guest-view').style.display = 'block';  // 비로그인 화면 보이기
-      document.getElementById('user-view').style.display = 'none';  // 로그인 후 화면 숨기기
-    }
+    document.addEventListener('DOMContentLoaded', () => {
+      if (sessionStorage.getItem('isLoggedIn') === 'true') {
+        // 로그인 상태일 때
+        document.getElementById('guest-view').style.display = 'none';  // 비로그인 화면 숨기기
+        document.getElementById('user-view').style.display = 'block';  // 로그인 후 화면 보이기
+      } else {
+        // 비로그인 상태일 때
+        document.getElementById('guest-view').style.display = 'block';  // 비로그인 화면 보이기
+        document.getElementById('user-view').style.display = 'none';  // 로그인 후 화면 숨기기
+      }
+    });
   </script>
 </body>
 </html>
