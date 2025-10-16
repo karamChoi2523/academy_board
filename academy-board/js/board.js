@@ -8,19 +8,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // URL에서 파라미터 가져오기
   const params = new URLSearchParams(window.location.search);
-  const boardType = params.get("type") || "notice";
-/*
+  boardType = params.get("type") || "notice";
+
   // 게시판 제목 설정
   const boardTitle = document.getElementById("board-title");
   const titles = {
-    "notice": "공지사항 게시판",
-    "question": "질문 게시판",
-    "assignment": "과제 게시판"
+    "notice": "📢 공지사항 게시판",
+    "question": "❓ 질문 게시판",
+    "assignment": "📝 과제 게시판"
   };
   boardTitle.innerText = titles[boardType] || "게시판";
-  */
 
-  // 게시물 목록 로드 (단 1회만 호출)
+  // 게시물 목록 로드
   const boardContent = document.getElementById("board-content");
   await loadBoardList(boardType, boardContent);
 });
