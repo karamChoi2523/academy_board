@@ -56,7 +56,7 @@ async function loadBoardList(boardType, boardContent) {
             <div class="post-title">${escapeHtml(post.title)}</div>
             <div class="post-meta">
               ${categoryDisplay}
-              <span class="post-meta-item author">👤 ${escapeHtml(post.nickname || '익명')}</span>
+              <span class="post-meta-item author">👤 ${escapeHtml(post.author_nickname || '익명')}</span>
               <span class="post-meta-item date">📅 ${formattedDate}</span>
             </div>
           </div>
