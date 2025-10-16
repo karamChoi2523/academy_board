@@ -180,7 +180,10 @@
 
     // 로그인 상태 확인 후, `guest-view`와 `user-view` 전환
     document.addEventListener('DOMContentLoaded', () => {
-      if (sessionStorage.getItem('isLoggedIn') === 'true') {
+      const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+      
+      // 로그인 상태가 있으면 user-view를, 없으면 guest-view를 보여준다
+      if (isLoggedIn === 'true') {
         // 로그인 상태일 때
         document.getElementById('guest-view').style.display = 'none';  // 비로그인 화면 숨기기
         document.getElementById('user-view').style.display = 'block';  // 로그인 후 화면 보이기
