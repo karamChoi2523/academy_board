@@ -125,6 +125,20 @@ button:hover {
   <script src="./js/board-detail.js" defer></script>
 
   <script>
+function convertNewlinesToBr(text) {
+  return text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+}
+
+function escapeHtml(text) {
+  if (!text) return '';
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
     // 로그인 상태 확인
     if (!sessionStorage.getItem('isLoggedIn')) {
       alert("로그인 후에 이용해주세요.");
@@ -157,9 +171,10 @@ async function loadPostDetails(postId) {
         <p style="margin: 0.3rem 0;"><strong>작성자:</strong> ${data.author_nickname ?? '익명'}</p>
       </div>
 
-      <div style="margin-top: 20px; line-height: 1.6; color: #333;">
-        <p>${data.content}</p>
-      </div>
+<div style="margin-top: 20px; line-height: 1.6; color: #333;">
+  ${convertNewlinesToBr(escapeHtml(data.content))}
+</div>
+
     `;
 
     // 게시물 작성자와 로그인한 사용자가 일치하는지 확인

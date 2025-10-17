@@ -54,9 +54,11 @@ if (!document.querySelector('link[href*="Noto+Sans+KR"]')) {
 
     // 6️⃣ 로그인 상태 반영
     if (result.logged_in) {
+      sessionStorage.setItem("role", result.user.role);
       sessionStorage.setItem("user_id", result.user.id);
       sessionStorage.setItem("isLoggedIn", "true");
     } else {
+      sessionStorage.removeItem("role");
       sessionStorage.removeItem("user_id");
       sessionStorage.removeItem("isLoggedIn");
     }
