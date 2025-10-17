@@ -72,7 +72,13 @@ academy_board/
 ├── uploads/              # 프로필 및 첨부파일 저장 경로
 ├── board.html            # 게시판 목록 페이지
 ├── board-detail.html     # 게시글 상세 페이지
-├── board-write.html      # 게시글 작성 페이지
+├── create.html           # 게시글 작성 페이지
+├── update.html           # 게시글 수정 페이지
 ├── login.html            # 로그인 페이지
 ├── register.html         # 회원가입 페이지
+├── forgot-password.html  # 게시글 작성 페이지
+├── header.html           # 게시글 작성 페이지
+├── index.html            # 게시글 작성 페이지
+├── profile.html          # 프로필 조회 페이지
+├── profile-edit.html     # 프로필 수정 페이지
 └── js/                   # JS
