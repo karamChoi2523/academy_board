@@ -19,6 +19,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
   boardTitle.innerText = titles[boardType] || "게시판";
 
+  // 로그인한 사용자 role 가져오기
+  const userRole = sessionStorage.getItem("role"); // 'student' 또는 'teacher'
+  const writeBtn = document.getElementById("write-btn"); // 글쓰기 버튼
+
+  // 🔹 공지사항 게시판일 때만 교사에게 글쓰기 버튼 보이기
+  if (writeBtn) {
+    if (boardType === "notice" && userRole === "teacher") {
+      writeBtn.style.display = "inline-block";
+    } else if (boardType !== "notice") {
+      // 공지 외의 게시판은 모두 학생/교사 상관없이 글쓰기 가능
+      writeBtn.style.display = "inline-block";
+    } else {
+      // 공지인데 교사가 아닌 경우
+      writeBtn.style.display = "none";
+    }
+  }
+
   // 게시물 목록 로드
   const boardContent = document.getElementById("board-content");
   await loadBoardList(boardType, boardContent);
@@ -61,7 +78,7 @@ async function loadBoardList(boardType, boardContent) {
             </div>
           </div>
           <div class="post-info">
-            <div class="post-views">조회 ${post.views || 0}</div>
+<div class="post-category-label">${escapeHtml(post.category || '없음')}</div>
             <div class="post-arrow">→</div>
           </div>
         `;

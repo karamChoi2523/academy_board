@@ -24,6 +24,7 @@ if (!document.querySelector('link[href*="Noto+Sans+KR"]')) {
     // 3️⃣ 요소 참조 (헤더 로드 후에 참조!)
     const loginLink = document.getElementById("login-link");
     const registerLink = document.getElementById("register-link");
+    const profileLink = document.getElementById("profile-link");
     const logoutLink = document.getElementById("logout-link");
     const menuToggle = document.getElementById("menu-toggle");
     const nav = document.getElementById("main-nav");
@@ -38,22 +39,26 @@ if (!document.querySelector('link[href*="Noto+Sans+KR"]')) {
 
     // 5️⃣ 로그인 상태에 따른 UI 업데이트 함수
     const updateUI = (isLoggedIn) => {
-      if (isLoggedIn) {
-        if (loginLink) loginLink.style.display = "none";
-        if (registerLink) registerLink.style.display = "none";
-        if (logoutLink) logoutLink.style.display = "inline-block";
-      } else {
-        if (loginLink) loginLink.style.display = "inline-block";
-        if (registerLink) registerLink.style.display = "inline-block";
-        if (logoutLink) logoutLink.style.display = "none";
-      }
-    };
+  if (isLoggedIn) {
+    if (loginLink) loginLink.style.display = "none";
+    if (registerLink) registerLink.style.display = "none";
+    if (profileLink) profileLink.style.display = "inline-block";  // ← 추가
+    if (logoutLink) logoutLink.style.display = "inline-block";
+  } else {
+    if (loginLink) loginLink.style.display = "inline-block";
+    if (registerLink) registerLink.style.display = "inline-block";
+    if (profileLink) profileLink.style.display = "none";  // ← 추가
+    if (logoutLink) logoutLink.style.display = "none";
+  }
+};
 
     // 6️⃣ 로그인 상태 반영
     if (result.logged_in) {
+      sessionStorage.setItem("role", result.user.role);
       sessionStorage.setItem("user_id", result.user.id);
       sessionStorage.setItem("isLoggedIn", "true");
     } else {
+      sessionStorage.removeItem("role");
       sessionStorage.removeItem("user_id");
       sessionStorage.removeItem("isLoggedIn");
     }

@@ -10,6 +10,7 @@ try {
             p.id, 
             p.title, 
             p.created_at,
+	    p.category,
             u.nickname AS author_nickname
           FROM posts p
           LEFT JOIN users u ON p.user_id = u.id

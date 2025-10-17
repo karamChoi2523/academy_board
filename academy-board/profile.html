@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원 정보</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f8f9fa;
+      min-height: 100vh;
+      color: #333;
+    }
+
+    main {
+      max-width: 600px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+    }
+
+    .profile-container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      padding: 2rem;
+    }
+
+    .profile-container h2 {
+      font-size: 1.8rem;
+      color: #333;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .profile-image-wrapper {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .profile-image-wrapper img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #4c9aff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      background: #f0f4ff;
+    }
+
+    .profile-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .profile-item:last-child { border-bottom: none; }
+
+    .profile-label {
+      font-weight: 600;
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    .profile-value {
+      color: #333;
+      font-size: 0.95rem;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      flex: 1;
+      min-width: 120px;
+      padding: 0.8rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-edit {
+      background: #4c9aff;
+      color: white;
+    }
+
+    .btn-edit:hover {
+      background: #3a7fd4;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(76, 154, 255, 0.3);
+    }
+
+    .btn-delete {
+      background: #ff6b6b;
+      color: white;
+    }
+
+    .btn-delete:hover {
+      background: #e05252;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+    }
+
+    .loading { text-align: center; padding: 2rem; color: #999; }
+
+    .error {
+      background: #fee;
+      color: #c33;
+      padding: 1rem;
+      border-radius: 6px;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    footer {
+      background: white;
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+      font-size: 0.9rem;
+      border-top: 1px solid #e5e7eb;
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 600px) {
+      main { margin: 2rem auto; }
+      .profile-container { padding: 1.5rem; }
+      .profile-container h2 { font-size: 1.5rem; margin-bottom: 1.5rem; }
+      .btn-group { flex-direction: column; }
+      .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div id="header-container"></div>
+
+  <main>
+    <div class="profile-container">
+      <h2>👤 회원 정보</h2>
+      <div id="profile-content" class="loading">로딩 중...</div>
+      <div class="btn-group">
+        <button class="btn btn-edit" onclick="goToEdit()">수정하기</button>
+        <button class="btn btn-delete" onclick="deleteAccount()">탈퇴하기</button>
+      </div>
+    </div>
+  </main>
+
+  <footer>© 2025 Haneul Academy Board · All Rights Reserved.</footer>
+
+  <script src="./js/common.js" defer></script>
+  <script>
+    function goToEdit() {
+      window.location.href = 'profile-edit.html';
+    }
+
+    // ✅ 회원 탈퇴
+    async function deleteAccount() {
+      if (!confirm("정말로 회원 탈퇴하시겠습니까?\n모든 정보가 삭제됩니다.")) return;
+
+      try {
+        const res = await fetch('/api/auth/delete-account.php', {
+          method: 'POST',
+          credentials: 'include'
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          alert('회원 탈퇴가 완료되었습니다.');
+          sessionStorage.clear();
+          window.location.href = 'index.html';
+        } else {
+          alert(data.message || '회원 탈퇴에 실패했습니다.');
+        }
+      } catch (err) {
+        console.error('탈퇴 오류:', err);
+        alert('서버 오류가 발생했습니다.');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!sessionStorage.getItem('isLoggedIn')) {
+        alert("로그인 후 이용해주세요.");
+        window.location.href = "login.html";
+        return;
+      }
+      await loadUserProfile();
+    });
+
+    async function loadUserProfile() {
+      try {
+        const response = await fetch('/api/user/get_user.php', {
+          method: 'GET',
+          credentials: 'include',
+          cache: 'no-store'
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+
+        if (data.success && data.user) displayUserProfile(data.user);
+        else showError('사용자 정보를 불러올 수 없습니다.');
+      } catch (error) {
+        console.error('프로필 로딩 오류:', error);
+        showError('프로필 정보를 불러오는 중 오류가 발생했습니다.');
+      }
+    }
+
+    function displayUserProfile(user) {
+      const profileContent = document.getElementById('profile-content');
+      const joinDate = new Date(user.created_at).toLocaleDateString('ko-KR');
+      let imagePath = '/img/defaultUserImg.png';
+      if (user.profile_image && user.profile_image !== 'default-profile.png')
+        imagePath = `/uploads/${escapeHtml(user.profile_image)}`;
+
+      const roleText = user.role === 'teacher' ? '선생님' :
+                       user.role === 'student' ? '학생' : '알 수 없음';
+
+      profileContent.innerHTML = `
+        <div class="profile-image-wrapper">
+          <img src="${imagePath}" alt="프로필 이미지">
+        </div>
+        <div class="profile-item"><span class="profile-label">이메일</span><span class="profile-value">${escapeHtml(user.email)}</span></div>
+        <div class="profile-item"><span class="profile-label">닉네임</span><span class="profile-value">${escapeHtml(user.nickname)}</span></div>
+        <div class="profile-item"><span class="profile-label">역할</span><span class="profile-value">${escapeHtml(roleText)}</span></div>
+        <div class="profile-item"><span class="profile-label">가입일</span><span class="profile-value">${joinDate}</span></div>
+      `;
+    }
+
+    function showError(message) {
+      const profileContent = document.getElementById('profile-content');
+      profileContent.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+  </script>
+</body>
+</html>
